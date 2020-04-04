@@ -3,7 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        
+        <variable
+            name="moviecontent"
+            type="com.taehyungkim.project_a.MovieContent" />
+        
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_margin="16dp"
-            android:text="줄거리"
+            android:text="@{moviecontent.titleText}"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -28,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginRight="5dp"
-            android:src="@drawable/ic_review_selected"
+            android:src="@{moviecontent.writingIcon}"
             app:layout_constraintRight_toLeftOf="@+id/writeText"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_margin="16dp"
-            android:text="작성하기"
+            android:text="@{moviecontent.writingText}"
             android:textColor="#FF5722"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -49,7 +53,7 @@
             android:layout_height="0dp"
             android:layout_margin="16dp"
             android:textSize="16sp"
-            android:text="content"
+            android:text="@{moviecontent.contentText}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/titleText" />
 
@@ -60,8 +64,53 @@
             android:layout_height="wrap_content"
             android:id="@+id/seeAllBt"
             android:textSize="20sp"
-            android:text="모두 보기"
+            android:text="@{moviecontent.seeBtName}"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/facebook_icon"
+            android:src="@{moviecontent.fbIcon}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="10dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/kakao_icon"
+            android:src="@{moviecontent.kaIcon}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/facebook_icon"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="10dp" />
+
+        <Button
+            android:id="@+id/reservation_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#E45454"
+            android:text="@{moviecontent.reservationBtName}"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"
+            android:paddingStart="60dp"
+            android:paddingEnd="60dp"
+            android:visibility="invisible"
+            app:layout_constraintLeft_toRightOf="@+id/kakao_icon"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/kakao_icon"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

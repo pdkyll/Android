@@ -5,9 +5,17 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.graphics.Movie;
 import android.os.Bundle;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG_LIST_FRAGMENT = "TAG_LIST_FRAGMENT";
+
+    ContentListFragment mContentListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,11 +29,22 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             FragmentTransaction ft = fm.beginTransaction();
 
-//            mEarthquakeListFragment = new EarthquakeListFragment();
-//            ft.add(R.id.main_activity_frame, mEarthquakeListFragment, TAG_LIST_FRAGMENT);
-//            ft.commitNow();
+            mContentListFragment = new ContentListFragment();
+            ft.add(R.id.content_frame, mContentListFragment, TAG_LIST_FRAGMENT);
+            ft.commitNow();
         } else {
-//            mEarthquakeListFragment = (EarthquakeListFragment)fm.findFragmentByTag(TAG_LIST_FRAGMENT);
+            mContentListFragment = (ContentListFragment)fm.findFragmentByTag(TAG_LIST_FRAGMENT);
         }
+
+
+        List<MovieContent> dummyQuakes = new ArrayList<MovieContent>(0);
+        dummyQuakes.add(new MovieContent(getString(R.string.content_title), getString(R.string.content)));
+        dummyQuakes.add(new MovieContent(getString(R.string.director_title), getString(R.string.director)));
+        dummyQuakes.add(new MovieContent(getString(R.string.evaluation_title), getDrawable(R.drawable.ic_review_selected),
+                                            getString(R.string.writing_title), getString(R.string.see_all_writing_content_bt)));
+        dummyQuakes.add(new MovieContent(getDrawable(R.drawable.ic_facebook), getDrawable(R.drawable.ic_kakao),
+                                        getString(R.string.reservation_bt)));
+
+        mContentListFragment.setMovieContents(dummyQuakes);
     }
 }
