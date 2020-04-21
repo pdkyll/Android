@@ -74,6 +74,7 @@
                     android:layout_marginTop="30dp">
 
                     <ImageView
+                        android:onClick="onClick"
                         android:id="@+id/like_img"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -91,6 +92,7 @@
                         android:textStyle="bold" />
 
                     <ImageView
+                        android:onClick="onClick"
                         android:id="@+id/dislike_img"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -320,7 +322,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
                     android:text="@string/writing_title"
-                    android:textColor="#FF5722"
+                    android:textColor="#2B2B2B"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintRight_toRightOf="parent"
