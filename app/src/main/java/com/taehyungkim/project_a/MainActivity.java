@@ -10,22 +10,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-    private ImageView thumbUp;
-    private ImageView thumbDown;
+    private ImageView thumbUpImg;
+    private ImageView thumbDownImg;
 
     private TextView likeText;
     private TextView dislikeText;
 
-    boolean isLikeClicked = false;
-    boolean isDislikeClicked = false;
+    boolean isLikeBtClicked = false;
+    boolean isDislikeBtClicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        thumbUp = (ImageView) findViewById(R.id.like_img);
-        thumbDown = (ImageView) findViewById(R.id.dislike_img);
+        thumbUpImg = (ImageView) findViewById(R.id.like_img);
+        thumbDownImg = (ImageView) findViewById(R.id.dislike_img);
 
         likeText = (TextView) findViewById(R.id.like_text);
         dislikeText = (TextView) findViewById(R.id.dislike_text);
@@ -39,19 +39,19 @@ public class MainActivity extends AppCompatActivity {
 
         switch (view.getId()) {
             case R.id.like_img:
-                if (!isLikeClicked && !isDislikeClicked) { // not clicked both "like" and "dislike"
-                    thumbUp.setImageResource(R.drawable.ic_thumb_up_selected);
+                if (!isLikeBtClicked && !isDislikeBtClicked) { // not clicked both "like" and "dislike"
+                    thumbUpImg.setImageResource(R.drawable.ic_thumb_up_selected);
                     likeText.setText(String.format(Locale.US, "%d", likeCount + 1));
-                    isLikeClicked = true;
+                    isLikeBtClicked = true;
                     break;
-                } else if (isLikeClicked && !isDislikeClicked) { // clicked "like" and not clicked "dislike"
+                } else if (isLikeBtClicked && !isDislikeBtClicked) { // clicked "like" and not clicked "dislike"
                     break;
                 } else { // clicked "dislike" and not clicked "like"
-                    thumbUp.setImageResource(R.drawable.ic_thumb_up_selected);
-                    thumbDown.setImageResource(R.drawable.ic_thumb_down);
+                    thumbUpImg.setImageResource(R.drawable.ic_thumb_up_selected);
+                    thumbDownImg.setImageResource(R.drawable.ic_thumb_down);
 
-                    isLikeClicked = true;
-                    isDislikeClicked = false;
+                    isLikeBtClicked = true;
+                    isDislikeBtClicked = false;
 
                     likeText.setText(String.format(Locale.US, "%d", likeCount + 1));
 
@@ -60,19 +60,19 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.dislike_img:
-                if (!isLikeClicked && !isDislikeClicked) { // not clicked both "like" and "dislike"
-                    thumbDown.setImageResource(R.drawable.ic_thumb_down_selected);
+                if (!isLikeBtClicked && !isDislikeBtClicked) { // not clicked both "like" and "dislike"
+                    thumbDownImg.setImageResource(R.drawable.ic_thumb_down_selected);
                     dislikeText.setText(String.format(Locale.US, "%d", dislikeCount + 1));
-                    isDislikeClicked = true;
+                    isDislikeBtClicked = true;
                     break;
-                } else if (isDislikeClicked && !isLikeClicked) { // clicked "dislike" and not clicked "like"
+                } else if (isDislikeBtClicked && !isLikeBtClicked) { // clicked "dislike" and not clicked "like"
                     break;
                 } else { // clicked "like" and not clicked "dislike"
-                    thumbDown.setImageResource(R.drawable.ic_thumb_down_selected);
-                    thumbUp.setImageResource(R.drawable.ic_thumb_up);
+                    thumbDownImg.setImageResource(R.drawable.ic_thumb_down_selected);
+                    thumbUpImg.setImageResource(R.drawable.ic_thumb_up);
 
-                    isDislikeClicked = true;
-                    isLikeClicked = false;
+                    isDislikeBtClicked = true;
+                    isLikeBtClicked = false;
 
                     dislikeText.setText(String.format(Locale.US, "%d", dislikeCount + 1));
 
