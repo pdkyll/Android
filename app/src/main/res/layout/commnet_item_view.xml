@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/user_pf_img_view"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/user1"
+        app:civ_border_color="#FFCCCCCC"
+        app:civ_border_width="2dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/user_id_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="kym71**"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@+id/user_pf_img_view"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/writingTime_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="10분전"
+        android:textColor="#FF999999"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@+id/user_pf_img_view"
+        app:layout_constraintTop_toBottomOf="@+id/user_id_view" />
+
+    <RatingBar
+        android:id="@+id/comment_rating_view"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:isIndicator="true"
+        android:numStars="5"
+        android:progressTint="#FF55BBAA"
+        android:rating="5"
+        android:theme="@style/RatingBar"
+        app:layout_constraintBottom_toBottomOf="@+id/writingTime_text_view"
+        app:layout_constraintLeft_toRightOf="@+id/writingTime_text_view" />
+
+    <TextView
+        android:id="@+id/comment_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요."
+        app:layout_constraintLeft_toRightOf="@+id/user_pf_img_view"
+        app:layout_constraintTop_toBottomOf="@+id/writingTime_text_view" />
+
+    <TextView
+        android:id="@+id/rec_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="추천"
+        app:layout_constraintLeft_toRightOf="@+id/user_pf_img_view"
+        app:layout_constraintTop_toBottomOf="@+id/comment_text_view" />
+
+    <TextView
+        android:id="@+id/recCount_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="0"
+        app:layout_constraintLeft_toRightOf="@+id/rec_text_view"
+        app:layout_constraintTop_toTopOf="@+id/rec_text_view" />
+
+    <TextView
+        android:id="@+id/divider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="|"
+        app:layout_constraintLeft_toRightOf="@id/recCount_text_view"
+        app:layout_constraintTop_toTopOf="@+id/rec_text_view" />
+
+    <TextView
+        android:id="@+id/report_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="신고하기"
+        android:textColor="#FF999999"
+        app:layout_constraintLeft_toRightOf="@+id/divider"
+        app:layout_constraintTop_toTopOf="@+id/rec_text_view" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
