@@ -3,6 +3,7 @@ package com.taehyungkim.project_a;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,10 +12,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class CommentItemRecyclerAdapter extends RecyclerView.Adapter<CommentItemRecyclerAdapter.ViewHolder> {
+    private ArrayList<String> id;
+    private ArrayList<String> time;
+    private ArrayList<Float> ratingBar;
+    private ArrayList<String> comment;
     private ArrayList<String> recCount;
 
-
-    CommentItemRecyclerAdapter(ArrayList<String> recCount) {
+    CommentItemRecyclerAdapter(ArrayList<String> id, ArrayList<String> time,
+                               ArrayList<Float> ratingBar, ArrayList<String> comment,
+                               ArrayList<String> recCount) {
+        this.id = id;
+        this.time = time;
+        this.ratingBar = ratingBar;
+        this.comment = comment;
         this.recCount = recCount;
     }
 
@@ -28,6 +38,10 @@ public class CommentItemRecyclerAdapter extends RecyclerView.Adapter<CommentItem
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.id.setText(id.get(position));
+        holder.time.setText(time.get(position));
+        holder.ratingBar.setRating(ratingBar.get(position));
+        holder.comment.setText(comment.get(position));
         holder.recCount.setText(recCount.get(position));
     }
 
@@ -37,10 +51,18 @@ public class CommentItemRecyclerAdapter extends RecyclerView.Adapter<CommentItem
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView id;
+        TextView time;
+        RatingBar ratingBar;
+        TextView comment;
         TextView recCount;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            id = itemView.findViewById(R.id.user_id_view);
+            time = itemView.findViewById(R.id.writingTime_text_view);
+            ratingBar = itemView.findViewById(R.id.comment_rating_view);
+            comment = itemView.findViewById(R.id.comment_text_view);
             recCount = itemView.findViewById(R.id.recCount_text_view);
         }
     }

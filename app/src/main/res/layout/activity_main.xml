@@ -336,7 +336,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/comment_recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:overScrollMode="never" />
 
 
             <Button
@@ -344,7 +345,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:background="@drawable/seeall_bt_frame"
+                android:background="@drawable/bt_frame"
                 android:onClick="onClick"
                 android:text="@string/see_all_writing_content_bt"
                 android:textColor="#9C27B0"
