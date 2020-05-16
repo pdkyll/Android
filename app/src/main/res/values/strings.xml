@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">씨네마천국</string>
 
+    <string name="TicketingRate">예매율</string>
+    <string name="rating">평점</string>
+    <string name="audience">누적관객수</string>
+
     <string name="content_title">줄거리</string>
     <string name="content">군도, 백성을 구하라!\n양반과 탐관오리들의 착취가 극에 달했던 조선 철종 13년. \n힘 없는 백성의 편이 되어
  세상을 바로잡고자 하는 의적떼인 \n군도(群盜), 지리산 추설이 있었다.\n\n쌍칼 도치 vs 백성의 적 조윤\n잦은 자연재해, 기근과 관의 횡포까지 겹쳐 백성들의 삶이 \n날로 피폐해 져 가는 사이,
@@ -27,4 +31,7 @@
     <string name="save">저 장</string>
     <string name="cancel">취 소</string>
 
+<!--  comment_item_view  -->
+    <string name="recommend">추천</string>
+    <string name="report">신고하기</string>
 </resources>

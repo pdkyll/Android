@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:text="kym71**"
+        android:hint="kym71**"
         android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@+id/user_pf_img_view"
@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="10분전"
+        android:hint="10분전"
         android:textColor="#FF999999"
         android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@+id/user_pf_img_view"
@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:text="적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요."
+        android:hint="적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요."
         app:layout_constraintLeft_toRightOf="@+id/user_pf_img_view"
         app:layout_constraintTop_toBottomOf="@+id/writingTime_text_view" />
 
@@ -73,7 +73,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:paddingBottom="10dp"
-        android:text="추천"
+        android:text="@string/recommend"
         app:layout_constraintLeft_toRightOf="@+id/user_pf_img_view"
         app:layout_constraintTop_toBottomOf="@+id/comment_text_view" />
 
@@ -82,7 +82,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="0"
+        android:hint="0"
         app:layout_constraintLeft_toRightOf="@+id/rec_text_view"
         app:layout_constraintTop_toTopOf="@+id/rec_text_view" />
 
@@ -100,7 +100,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="신고하기"
+        android:text="@string/report"
         android:textColor="#FF999999"
         app:layout_constraintLeft_toRightOf="@+id/divider"
         app:layout_constraintTop_toTopOf="@+id/rec_text_view" />
