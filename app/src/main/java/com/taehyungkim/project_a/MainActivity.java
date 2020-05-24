@@ -7,123 +7,58 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-    private ImageView thumbUpImg;
-    private ImageView thumbDownImg;
 
-    private TextView likeText;
-    private TextView dislikeText;
-
-    boolean isLikeBtClicked = false;
-    boolean isDislikeBtClicked = false;
-
-    public RecyclerView com_recycler_view;
-    public CommentItemRecyclerAdapter commentAdapter;
-
-    public ArrayList<String> id = new ArrayList<>();
-    public ArrayList<String> time = new ArrayList<>();
-    public ArrayList<Float> rating = new ArrayList<>();
-    public ArrayList<String> comment = new ArrayList<>();
-    public ArrayList<String> recommendCount = new ArrayList<>();
+    private AppBarConfiguration mAppBarConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        thumbUpImg = (ImageView) findViewById(R.id.like_img_view);
-        thumbDownImg = (ImageView) findViewById(R.id.dislike_img_view);
+        // Toolbar 설정
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        likeText = (TextView) findViewById(R.id.like_text_view);
-        dislikeText = (TextView) findViewById(R.id.dislike_text_view);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
 
+        // navigationView 설정
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        // fragment 목록 설정.
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_movie_list, R.id.nav_movie_api, R.id.nav_movie_book)
+                .setDrawerLayout(drawer)
+                .build();
 
-        id.add("kym71**");
-        time.add("10분전");
-        rating.add(5.0f);
-        comment.add("적당히 재밌다. 오랜만에 잠 안오는 영화 봤네요.");
-        recommendCount.add("0");
-
-        id.add("angel**");
-        time.add("15분전");
-        rating.add(4.7f);
-        comment.add("웃긴 내용보다는 좀 더 진지한 영화.");
-        recommendCount.add("1");
-
-        com_recycler_view = (RecyclerView) findViewById(R.id.comment_recycler_view);
-        com_recycler_view.setLayoutManager(new LinearLayoutManager(this));
-
-        // 리사이클러 뷰에 구분선 라인 추가
-        com_recycler_view.addItemDecoration(new DividerItemDecoration(this, 1));
-
-        commentAdapter = new CommentItemRecyclerAdapter(id, time, rating, comment, recommendCount);
-        com_recycler_view.setAdapter(commentAdapter);
+        // 터치하면 자동으로 프래그먼트 화면으로 이동
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
     }
 
-    public void onClick(View view) {
-        int likeCount = Integer.parseInt(likeText.getText().toString());
-        int dislikeCount = Integer.parseInt(dislikeText.getText().toString());
-
-        switch (view.getId()) {
-            case R.id.like_img_view:
-                if (!isLikeBtClicked && !isDislikeBtClicked) { // not clicked both "like" and "dislike"
-                    thumbUpImg.setImageResource(R.drawable.ic_thumb_up_selected);
-                    likeText.setText(String.format(Locale.US, "%d", likeCount + 1));
-                    isLikeBtClicked = true;
-                    break;
-                } else if (isLikeBtClicked && !isDislikeBtClicked) { // clicked "like" and not clicked "dislike"
-                    break;
-                } else { // clicked "dislike" and not clicked "like"
-                    thumbUpImg.setImageResource(R.drawable.ic_thumb_up_selected);
-                    thumbDownImg.setImageResource(R.drawable.ic_thumb_down);
-
-                    isLikeBtClicked = true;
-                    isDislikeBtClicked = false;
-
-                    likeText.setText(String.format(Locale.US, "%d", likeCount + 1));
-
-                    dislikeText.setText(String.format(Locale.US, "%d", dislikeCount - 1));
-                }
-                break;
-
-            case R.id.dislike_img_view:
-                if (!isLikeBtClicked && !isDislikeBtClicked) { // not clicked both "like" and "dislike"
-                    thumbDownImg.setImageResource(R.drawable.ic_thumb_down_selected);
-                    dislikeText.setText(String.format(Locale.US, "%d", dislikeCount + 1));
-                    isDislikeBtClicked = true;
-                    break;
-                } else if (isDislikeBtClicked && !isLikeBtClicked) { // clicked "dislike" and not clicked "like"
-                    break;
-                } else { // clicked "like" and not clicked "dislike"
-                    thumbDownImg.setImageResource(R.drawable.ic_thumb_down_selected);
-                    thumbUpImg.setImageResource(R.drawable.ic_thumb_up);
-
-                    isDislikeBtClicked = true;
-                    isLikeBtClicked = false;
-
-                    dislikeText.setText(String.format(Locale.US, "%d", dislikeCount + 1));
-
-                    likeText.setText(String.format(Locale.US, "%d", likeCount - 1));
-                }
-                break;
-
-            case R.id.writingBt_view:
-                Intent wiringCommentIntent = new Intent(getApplicationContext(), WritingCommentActivity.class);
-                startActivity(wiringCommentIntent);
-                break;
-
-            case R.id.seeAllBt_view:
-                Intent commentListIntent = new Intent(getApplicationContext(), CommentListActivity.class);
-                startActivity(commentListIntent);
-                break;
-        }
+    // 내비게이션 버튼을 누르면 drawlayout이 활성화됨.
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+                || super.onSupportNavigateUp();
     }
 
 }

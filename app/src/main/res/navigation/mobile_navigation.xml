@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_movie_list">
+
+    <fragment
+        android:id="@+id/nav_movie_list"
+        android:name="com.taehyungkim.project_a.FragmentMovieDetails"
+        android:label="@string/movie_list"
+        tools:layout="@layout/fragment_movie_details">
+
+    </fragment>
+
+<!--    <fragment-->
+<!--        android:id="@+id/nav_movie_api"-->
+<!--        android:name="com.example.mydrawer.ui.gallery.GalleryFragment"-->
+<!--        android:label="@string/movie_API"-->
+<!--        tools:layout="@layout/fragment_gallery" />-->
+
+<!--    <fragment-->
+<!--        android:id="@+id/nav_movie_book"-->
+<!--        android:name="com.example.mydrawer.ui.slideshow.SlideshowFragment"-->
+<!--        android:label="@string/movie_book"-->
+<!--        tools:layout="@layout/fragment_slideshow" />-->
+</navigation>

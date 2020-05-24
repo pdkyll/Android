@@ -31,7 +31,18 @@
     <string name="save">저 장</string>
     <string name="cancel">취 소</string>
 
-<!--  comment_item_view  -->
+    <!--  comment_item_view  -->
     <string name="recommend">추천</string>
     <string name="report">신고하기</string>
+
+    <!-- nav_header_main -->
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="nav_header_title">Mike</string>
+    <string name="nav_header_subtitle">Mike.jung.global@gmail.com</string>
+
+    <!-- activity_main_drawer -->
+    <string name="movie_list">영화 목록</string>
+    <string name="movie_API">영화 API</string>
+    <string name="movie_book">예매하기</string>
+    <string name="movie_details">상세보기</string>
 </resources>
