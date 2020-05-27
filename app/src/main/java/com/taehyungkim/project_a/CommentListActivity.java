@@ -8,12 +8,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 
+import com.taehyungkim.project_a.ui.adapter.MovieDetailsAdapter;
+
 import java.util.ArrayList;
 
 public class CommentListActivity extends AppCompatActivity {
 
     public RecyclerView writingRecyclerView;
-    public CommentItemRecyclerAdapter commentAdapter;
+    public MovieDetailsAdapter commentAdapter;
 
     public ArrayList<String> id = new ArrayList<>();
     public ArrayList<String> time = new ArrayList<>();
@@ -86,7 +88,7 @@ public class CommentListActivity extends AppCompatActivity {
         // 리사이클러 뷰에 구분선 라인 추가
         writingRecyclerView.addItemDecoration(new DividerItemDecoration(this, 1));
 
-        commentAdapter = new CommentItemRecyclerAdapter(id, time, rating, comment, recommendCount);
+        commentAdapter = new MovieDetailsAdapter(id, time, rating, comment, recommendCount);
         writingRecyclerView.setAdapter(commentAdapter);
     }
 

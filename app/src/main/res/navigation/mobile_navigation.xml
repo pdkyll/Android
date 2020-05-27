@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_movie_list"
-        android:name="com.taehyungkim.project_a.FragmentMovieDetails"
+        android:name="com.taehyungkim.project_a.ui.MovieListFragment"
         android:label="@string/movie_list"
         tools:layout="@layout/fragment_movie_details">
 

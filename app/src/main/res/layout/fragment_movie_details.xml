@@ -77,7 +77,6 @@
                         android:id="@+id/like_img_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:onClick="onClick"
                         android:src="@drawable/ic_thumb_up" />
 
                     <TextView
@@ -97,7 +96,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="30dp"
                         android:layout_toEndOf="@+id/like_text_view"
-                        android:onClick="onClick"
                         app:srcCompat="@drawable/ic_thumb_down" />
 
                     <TextView
@@ -322,7 +320,6 @@
                     android:layout_margin="15dp"
                     android:background="@drawable/writing_bt_frame"
                     android:gravity="top"
-                    android:onClick="onClick"
                     android:text="@string/writing_title"
                     android:textColor="#FFFF6600"
                     android:textSize="20sp"
@@ -337,7 +334,8 @@
                 android:id="@+id/comment_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:overScrollMode="never" />
+                android:overScrollMode="never"
+                android:isScrollContainer="false"/>
 
 
             <Button
@@ -346,7 +344,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:background="@drawable/bt_frame"
-                android:onClick="onClick"
                 android:text="@string/see_all_writing_content_bt"
                 android:textColor="#9C27B0"
                 android:textSize="20sp"

@@ -1,4 +1,4 @@
-package com.taehyungkim.project_a;
+package com.taehyungkim.project_a.ui.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,16 +9,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.taehyungkim.project_a.R;
+
 import java.util.ArrayList;
 
-public class CommentItemRecyclerAdapter extends RecyclerView.Adapter<CommentItemRecyclerAdapter.ViewHolder> {
+public class MovieDetailsAdapter extends RecyclerView.Adapter<MovieDetailsAdapter.ViewHolder> {
     private ArrayList<String> id;
     private ArrayList<String> time;
     private ArrayList<Float> ratingBar;
     private ArrayList<String> comment;
     private ArrayList<String> recCount;
 
-    CommentItemRecyclerAdapter(ArrayList<String> id, ArrayList<String> time,
+    public MovieDetailsAdapter(ArrayList<String> id, ArrayList<String> time,
                                ArrayList<Float> ratingBar, ArrayList<String> comment,
                                ArrayList<String> recCount) {
         this.id = id;
@@ -32,7 +34,7 @@ public class CommentItemRecyclerAdapter extends RecyclerView.Adapter<CommentItem
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.comment_item_view, parent, false);
+                .inflate(R.layout.item_comment_list, parent, false);
         return new ViewHolder(view);
     }
 
