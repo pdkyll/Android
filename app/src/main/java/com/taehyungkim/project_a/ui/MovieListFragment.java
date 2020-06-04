@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,8 +30,11 @@ public class MovieListFragment extends Fragment {
 
     Context context;
 
+    Button bt_movie_details;
+
 
     @Override
+
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
@@ -44,6 +47,7 @@ public class MovieListFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_movie_list, container, false);
 
         viewPager2 = (ViewPager2) rootView.findViewById(R.id.viewPager);
+        bt_movie_details = (Button) rootView.findViewById(R.id.bt_movie_details);
 
         movie_view.add(R.drawable.image1);
         movie_name.add("1. 군 도");
@@ -85,6 +89,23 @@ public class MovieListFragment extends Fragment {
         movieListAdapter = new MovieListAdapter(movie_view, movie_name, book_rate, age, date);
         viewPager2.setAdapter(movieListAdapter);
         viewPager2.setOffscreenPageLimit(3);
+
+//        val pageMarginPx = getResources().getDimensionPixelOffset(R.dimen.pageMargin);
+//        val pagerWidth = resources.getDimensionPixelOffset(R.dimen.pagerWidth);
+//        val screenWidth = resources.displayMetrics.widthPixels;
+//        val offsetPx = screenWidth - pageMarginPx - pagerWidth;
+//
+//        viewPager2.setPageTransformer { page, position ->
+//                page.translationX = position * -offsetPx
+//        }
+
+        viewPager2.setPageTransformer((page, position) -> {
+            page.setTranslationX(position * -200.0f);
+        });
+
+        bt_movie_details.setOnClickListener( v -> {
+
+        });
     }
 
     @Override
