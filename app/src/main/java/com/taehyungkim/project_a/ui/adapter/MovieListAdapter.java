@@ -3,10 +3,12 @@ package com.taehyungkim.project_a.ui.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.taehyungkim.project_a.R;
@@ -20,6 +22,8 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     private ArrayList<String> book_rate;
     private ArrayList<String> age;
     private ArrayList<String> date;
+
+    Button bt_movie_details;
 
     public MovieListAdapter(ArrayList<Integer> movie_view, ArrayList<String> movie_name,
                             ArrayList<String> book_rate, ArrayList<String> age, ArrayList<String> date) {
@@ -35,6 +39,12 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     public MovieListAdapter.MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_movie_list, parent, false);
+        bt_movie_details = (Button) view.findViewById(R.id.bt_movie_details);
+
+        bt_movie_details.setOnClickListener(v -> {
+            Navigation.findNavController(view).navigate(R.id.action_nav_movie_list_to_nav_movie_details);
+        });
+
         return new MovieViewHolder(view);
     }
 
