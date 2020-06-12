@@ -12,17 +12,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.taehyungkim.project_a.R;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class MovieDetailsAdapter extends RecyclerView.Adapter<MovieDetailsAdapter.ViewHolder> {
     private ArrayList<String> id;
     private ArrayList<String> time;
     private ArrayList<Float> ratingBar;
     private ArrayList<String> comment;
-    private ArrayList<String> recCount;
+    private ArrayList<Integer> recCount;
 
     public MovieDetailsAdapter(ArrayList<String> id, ArrayList<String> time,
                                ArrayList<Float> ratingBar, ArrayList<String> comment,
-                               ArrayList<String> recCount) {
+                               ArrayList<Integer> recCount) {
         this.id = id;
         this.time = time;
         this.ratingBar = ratingBar;
@@ -42,9 +43,9 @@ public class MovieDetailsAdapter extends RecyclerView.Adapter<MovieDetailsAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.id.setText(id.get(position));
         holder.time.setText(time.get(position));
-        holder.ratingBar.setRating(ratingBar.get(position));
+        holder.ratingBar.setRating(ratingBar.get(position) / 2);
         holder.comment.setText(comment.get(position));
-        holder.recCount.setText(recCount.get(position));
+        holder.recCount.setText(String.format(Locale.US, "%d", recCount.get(position)));
     }
 
     @Override

@@ -12,7 +12,7 @@
  죽어도 잊지 못할 \n끔찍한 일을 당한 뒤 군도에 합류. 지리산 추설의 신 거성(新 \n巨星) 도치로 거듭난다.\n\n뭉치면 백성, 흩어지면 도적!\n망할 세상을 뒤집기 위해, 백성이 주인인 새 세상을 향해 \n도치를 필두로 한 군도는 백성의 적,
  조윤과 한 판 승부를 \n시작하는데&#8230;</string>
 
-    <string name="director_title">감독/출연</string>
+    <string name="director_title">감독 / 출연</string>
     <string name="director"><b>감독</b> 윤종빈\n<b>출연</b> 하정우(도치), 강동원(조윤)</string>
 
     <string name="evaluation_title">한줄평</string>
@@ -44,7 +44,9 @@
     <string name="movie_list">영화 목록</string>
     <string name="movie_API">영화 API</string>
     <string name="movie_book">예매하기</string>
-    <string name="movie_details">상세보기</string>
+    <string name="movie_details">영화 상세</string>
+    <string name="comment_list">한줄평 목록</string>
+    <string name="writing_comment">한줄평 작성</string>
     <string name="setting">설정</string>
     <string name="user_setting">사용자 설정</string>
 

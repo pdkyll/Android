@@ -22,17 +22,27 @@
         android:label="@string/movie_details"
         tools:layout="@layout/fragment_movie_details">
 
+        <action
+            android:id="@+id/action_nav_movie_details_to_nav_comment_list"
+            app:destination="@id/nav_comment_list"/>
+        <action
+            android:id="@+id/action_nav_movie_details_to_nav_writing_comment"
+            app:destination="@id/nav_writing_comment" />
     </fragment>
 
-    <!--    <fragment-->
-    <!--        android:id="@+id/nav_movie_api"-->
-    <!--        android:name="com.example.mydrawer.ui.gallery.GalleryFragment"-->
-    <!--        android:label="@string/movie_API"-->
-    <!--        tools:layout="@layout/fragment_gallery" />-->
+    <fragment
+        android:id="@+id/nav_comment_list"
+        android:name="com.taehyungkim.project_a.ui.MovieCommentListFragment"
+        android:label="@string/comment_list"
+        tools:layout="@layout/fragment_comment_list" />
 
-    <!--    <fragment-->
-    <!--        android:id="@+id/nav_movie_book"-->
-    <!--        android:name="com.example.mydrawer.ui.slideshow.SlideshowFragment"-->
-    <!--        android:label="@string/movie_book"-->
-    <!--        tools:layout="@layout/fragment_slideshow" />-->
+    <fragment
+        android:id="@+id/nav_writing_comment"
+        android:name="com.taehyungkim.project_a.ui.MovieWritingCommentFragment"
+        android:label="@string/writing_comment"
+        tools:layout="@layout/fragment_writing_comment" >
+        <action
+            android:id="@+id/action_nav_writing_comment_to_nav_movie_details"
+            app:destination="@id/nav_movie_details" />
+    </fragment>
 </navigation>
