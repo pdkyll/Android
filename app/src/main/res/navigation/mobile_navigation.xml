@@ -34,7 +34,11 @@
         android:id="@+id/nav_comment_list"
         android:name="com.taehyungkim.project_a.ui.MovieCommentListFragment"
         android:label="@string/comment_list"
-        tools:layout="@layout/fragment_comment_list" />
+        tools:layout="@layout/fragment_comment_list" >
+        <action
+            android:id="@+id/action_nav_comment_list_to_nav_writing_comment"
+            app:destination="@id/nav_writing_comment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_writing_comment"

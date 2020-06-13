@@ -1,6 +1,7 @@
 package com.taehyungkim.project_a.network;
 
 import com.taehyungkim.project_a.DTO.MovieCommentResponse;
+import com.taehyungkim.project_a.DTO.MovieCreateCommentResponse;
 import com.taehyungkim.project_a.DTO.MovieDetailsResponse;
 import com.taehyungkim.project_a.DTO.MovieListsResponse;
 
@@ -20,4 +21,10 @@ public interface MovieAPIInterface {
 
     @GET("/movie/readCommentList")
     Call<MovieCommentResponse> getMovieComment(@Query("id") int id);
+
+    @GET("/movie/createComment")
+    Call<MovieCreateCommentResponse> createComment(@Query("id") int id,
+                                                   @Query("writer") String writer,
+                                                   @Query("rating") float rating,
+                                                   @Query("contents") String contents);
 }

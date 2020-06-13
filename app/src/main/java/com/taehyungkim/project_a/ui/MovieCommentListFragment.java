@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -94,10 +95,9 @@ public class MovieCommentListFragment extends Fragment {
         ratingCount = (TextView) rootView.findViewById(R.id.ratingCount);
 
         Button bt_writing = (Button) rootView.findViewById(R.id.writingBt_view);
-        bt_writing.setOnClickListener(v -> {
-            // temp
-            Toast.makeText(context, "작성하기 버튼 클릭", Toast.LENGTH_LONG).show();
-        });
+        bt_writing.setOnClickListener(v ->
+                Navigation.findNavController(rootView).navigate(R.id.action_nav_comment_list_to_nav_writing_comment)
+        );
 
         return rootView;
     }
@@ -117,7 +117,9 @@ public class MovieCommentListFragment extends Fragment {
                 for (int i = 0; i < list.size(); i++) {
                     MovieCommentList movieCommentList = (MovieCommentList) list.get(i);
                     id.add(movieCommentList.review_id);
-                    time.add(movieCommentList.time);
+                    time.add(movieCommentList.time.
+                            replace('-', '.').
+                            substring(2, movieCommentList.time.length()));
                     rating.add(movieCommentList.rating);
                     comment.add(movieCommentList.contents);
                     recommendCount.add(movieCommentList.recommend);

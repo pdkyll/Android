@@ -214,7 +214,9 @@ public class MovieDetailsFragment extends Fragment {
                     for (int i = 0; i < 2; i++) {
                         MovieCommentList movieCommentList = (MovieCommentList) list.get(i);
                         id.add(movieCommentList.review_id);
-                        time.add(movieCommentList.time);
+                        time.add(movieCommentList.time.
+                                replace('-', '.').
+                                substring(2, movieCommentList.time.length()));
                         rating.add(movieCommentList.rating);
                         comment.add(movieCommentList.contents);
                         recommendCount.add(movieCommentList.recommend);
