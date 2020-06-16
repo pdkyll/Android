@@ -12,8 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.taehyungkim.project_a.DTO.MovieListInfo;
-import com.taehyungkim.project_a.DTO.MovieListsResponse;
+import com.taehyungkim.project_a.vo.MovieListInfo;
+import com.taehyungkim.project_a.vo.MovieListsResponse;
 import com.taehyungkim.project_a.R;
 import com.taehyungkim.project_a.network.MovieAPIHelper;
 import com.taehyungkim.project_a.network.MovieAPIInterface;

@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import com.taehyungkim.project_a.DTO.MovieCreateCommentResponse;
+import com.taehyungkim.project_a.vo.MovieCreateCommentResponse;
 import com.taehyungkim.project_a.R;
 import com.taehyungkim.project_a.network.MovieAPIHelper;
 import com.taehyungkim.project_a.network.MovieAPIInterface;
@@ -76,7 +76,7 @@ public class MovieWritingCommentFragment extends Fragment {
             float rating = ratingBar.getRating();
             if (comments.length() > 0 && rating != 0) {
                 Call<MovieCreateCommentResponse> call = apiInterface.
-                        createComment(getMovieNum + 1, "Thkim", ratingBar.getRating(), comments);
+                        createComment(getMovieNum + 1, "Thkim", ratingBar.getRating() * 2, comments);
                 call.enqueue(callback);
             } else if (rating == 0) {
                 Toast.makeText(context, "평점을 입력해 주세요.", Toast.LENGTH_LONG).show();

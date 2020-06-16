@@ -22,10 +22,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.taehyungkim.project_a.DTO.MovieCommentList;
-import com.taehyungkim.project_a.DTO.MovieCommentResponse;
-import com.taehyungkim.project_a.DTO.MovieDetailsInfo;
-import com.taehyungkim.project_a.DTO.MovieDetailsResponse;
+import com.taehyungkim.project_a.vo.MovieCommentList;
+import com.taehyungkim.project_a.vo.MovieCommentResponse;
+import com.taehyungkim.project_a.vo.MovieDetailsInfo;
+import com.taehyungkim.project_a.vo.MovieDetailsResponse;
 import com.taehyungkim.project_a.R;
 import com.taehyungkim.project_a.network.MovieAPIHelper;
 import com.taehyungkim.project_a.network.MovieAPIInterface;

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,8 +17,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.taehyungkim.project_a.DTO.MovieCommentList;
-import com.taehyungkim.project_a.DTO.MovieCommentResponse;
+import com.taehyungkim.project_a.vo.MovieCommentList;
+import com.taehyungkim.project_a.vo.MovieCommentResponse;
 import com.taehyungkim.project_a.R;
 import com.taehyungkim.project_a.network.MovieAPIHelper;
 import com.taehyungkim.project_a.network.MovieAPIInterface;

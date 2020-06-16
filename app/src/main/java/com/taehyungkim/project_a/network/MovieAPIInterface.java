@@ -1,9 +1,9 @@
 package com.taehyungkim.project_a.network;
 
-import com.taehyungkim.project_a.DTO.MovieCommentResponse;
-import com.taehyungkim.project_a.DTO.MovieCreateCommentResponse;
-import com.taehyungkim.project_a.DTO.MovieDetailsResponse;
-import com.taehyungkim.project_a.DTO.MovieListsResponse;
+import com.taehyungkim.project_a.vo.MovieCommentResponse;
+import com.taehyungkim.project_a.vo.MovieCreateCommentResponse;
+import com.taehyungkim.project_a.vo.MovieDetailsResponse;
+import com.taehyungkim.project_a.vo.MovieListsResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
