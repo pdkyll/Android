@@ -1,11 +1,8 @@
 package com.thkim.kotlinprogramming.kotlin
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.view.View
-import com.thkim.kotlinprogramming.R
 import org.jetbrains.anko.*
 
+// Use DSL(DomainSpecific Language)
 class MainActivityUI : AnkoComponent<MainActivity> {
 
     override fun createView(ui: AnkoContext<MainActivity>) = ui.apply {

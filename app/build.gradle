@@ -22,6 +22,26 @@ android {
         }
     }
 
+    buildFeatures {
+        // Enables Jetpack Compose for this module
+        compose true
+    }
+
+    // Set both the Java and Kotlin compilers to target Java 8.
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion "0.1.0-dev13"
+    }
+
     // 'kotlin' 폴더를 소스 코드 폴더로 인식하도록 설정한다.
 //    sourceSets {
 //        main.java.dstDirs += 'src/main/kotlin'
@@ -45,4 +65,11 @@ dependencies {
     // Anko Layouts
     implementation "org.jetbrains.anko:anko-sdk25:$anko_version" // sdk15, sdk19, sdk21, sdk23 are also available
     implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
+
+    // You also need to include the following Compose toolkit dependencies.
+    implementation 'androidx.ui:ui-core:0.1.0-dev13'
+    implementation 'androidx.ui:ui-tooling:0.1.0-dev13'
+    implementation 'androidx.ui:ui-layout:0.1.0-dev13'
+    implementation 'androidx.ui:ui-material:0.1.0-dev13'
+
 }
