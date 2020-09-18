@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.Composable
 import androidx.fragment.app.Fragment
-import androidx.ui.tooling.preview.Preview
 import org.jetbrains.anko.*
 
 /*
@@ -28,7 +26,6 @@ class MainFragment : Fragment() {
 }
 
 
-@Composable
 class MainFragmentUI : AnkoComponent<MainFragment> {
     override fun createView(ui: AnkoContext<MainFragment>) = ui.apply {
         verticalLayout {
