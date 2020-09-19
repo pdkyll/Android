@@ -4,14 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.ProgressBar
-import android.widget.TextView
 import com.androidhuman.example.simplegithub.R
 import com.androidhuman.example.simplegithub.api.GithubApi
 import com.androidhuman.example.simplegithub.api.GithubApiProvider
@@ -19,14 +16,13 @@ import com.androidhuman.example.simplegithub.api.model.GithubRepo
 import com.androidhuman.example.simplegithub.api.model.RepoSearchResponse
 import com.androidhuman.example.simplegithub.ui.repo.RepositoryActivity
 import com.androidhuman.example.simplegithub.ui.search.SearchAdapter.ItemClickListener
+import kotlinx.android.synthetic.main.activity_search.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class SearchActivity : AppCompatActivity(), ItemClickListener {
-    internal lateinit var rvList: RecyclerView
-    internal lateinit var progress: ProgressBar
-    internal lateinit var tvMessage: TextView
+
     internal lateinit var menuSearch: MenuItem
     internal lateinit var searchView: SearchView
     internal lateinit var adapter: SearchAdapter
@@ -37,15 +33,12 @@ class SearchActivity : AppCompatActivity(), ItemClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        rvList = findViewById(R.id.rvActivitySearchList)
-        progress = findViewById(R.id.pbActivitySearch)
-        tvMessage = findViewById(R.id.tvActivitySearchMessage)
-
         // 검색 결과를 표시할 어댑터를 리사이클러뷰에 설정합니다.
         adapter = SearchAdapter()
         adapter.setItemClickListener(this)
-        rvList.layoutManager = LinearLayoutManager(this)
-        rvList.adapter = adapter
+
+        rvActivitySearchList.layoutManager = LinearLayoutManager(this)
+        rvActivitySearchList.adapter = adapter
 
         api = GithubApiProvider.provideGithubApi(this)
     }
@@ -151,21 +144,21 @@ class SearchActivity : AppCompatActivity(), ItemClickListener {
     }
 
     private fun showProgress() {
-        progress.visibility = View.VISIBLE
+        pbActivitySearch.visibility = View.VISIBLE
     }
 
     private fun hideProgress() {
-        progress.visibility = View.GONE
+        pbActivitySearch.visibility = View.GONE
     }
 
     private fun showError(message: String?) {
         // message 가 널 값인 경우 "Unexpected error." 메시지를 표시합니다.
-        tvMessage.text = message ?: "Unexpected error."
-        tvMessage.visibility = View.VISIBLE
+        tvActivitySearchMessage.text = message ?: "Unexpected error."
+        tvActivitySearchMessage.visibility = View.VISIBLE
     }
 
     private fun hideError() {
-        tvMessage.text = ""
-        tvMessage.visibility = View.GONE
+        tvActivitySearchMessage.text = ""
+        tvActivitySearchMessage.visibility = View.GONE
     }
 }

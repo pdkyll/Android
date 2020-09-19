@@ -20,9 +20,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+import kotlinx.android.synthetic.main.activity_sign_in.*
+
 class SignInActivity : AppCompatActivity() {
-    internal lateinit var btnStart: Button
-    internal lateinit var progress: ProgressBar
+
     internal lateinit var api: AuthApi
     internal lateinit var authTokenProvider: AuthTokenProvider
     internal lateinit var accessTokenCall: Call<GithubAccessToken>
@@ -31,9 +32,6 @@ class SignInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
 
-        btnStart = findViewById(R.id.btnActivitySignInStart)
-        progress = findViewById(R.id.pbActivitySignIn)
-
         /*
          * 1. 버튼 클릭.
          * 버튼 초기화 과정.
@@ -41,7 +39,8 @@ class SignInActivity : AppCompatActivity() {
          * 웹페이지 주소는 Github 애플리케이션의 Client ID를 넣어준다.
          * 웹피이지는 크롬 커스텀 탭을 사용하여 표시한다.
          */
-        btnStart.setOnClickListener{
+        // 인스턴스 선언 없이 뷰 ID 를 사용하여 인스턴스에 접근합니다.
+        btnActivitySignInStart.setOnClickListener{
             val authUri = Uri.Builder().scheme("https").authority("github.com")
                     .appendPath("login")
                     .appendPath("oauth")
@@ -124,13 +123,13 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun showProgress() {
-        btnStart.visibility = View.GONE
-        progress.visibility = View.VISIBLE
+        btnActivitySignInStart.visibility = View.GONE
+        pbActivitySignIn.visibility = View.VISIBLE
     }
 
     private fun hideProgress() {
-        btnStart.visibility = View.VISIBLE
-        progress.visibility = View.GONE
+        btnActivitySignInStart.visibility = View.VISIBLE
+        pbActivitySignIn.visibility = View.GONE
     }
 
     private fun showError(throwable: Throwable) {

@@ -13,6 +13,7 @@ import com.androidhuman.example.simplegithub.api.GithubApiProvider
 import com.androidhuman.example.simplegithub.api.model.GithubRepo
 import com.androidhuman.example.simplegithub.ui.GlideApp
 import com.androidhuman.example.simplegithub.ui.repo.RepositoryActivity
+import kotlinx.android.synthetic.main.activity_repository.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,15 +22,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class RepositoryActivity : AppCompatActivity() {
-    internal lateinit var llContent: LinearLayout
-    internal lateinit var ivProfile: ImageView
-    internal lateinit var tvName: TextView
-    internal lateinit var tvStars: TextView
-    internal lateinit var tvDescription: TextView
-    internal lateinit var tvLanguage: TextView
-    internal lateinit var tvLastUpdate: TextView
-    internal lateinit var pbProgress: ProgressBar
-    internal lateinit var tvMessage: TextView
+
     internal lateinit var api: GithubApi
     internal lateinit var repoCall: Call<GithubRepo>
 
@@ -44,16 +37,6 @@ class RepositoryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_repository)
-
-        llContent = findViewById(R.id.llActivityRepositoryContent)
-        ivProfile = findViewById(R.id.ivActivityRepositoryProfile)
-        tvName = findViewById(R.id.tvActivityRepositoryName)
-        tvStars = findViewById(R.id.tvActivityRepositoryStars)
-        tvDescription = findViewById(R.id.tvActivityRepositoryDescription)
-        tvLanguage = findViewById(R.id.tvActivityRepositoryLanguage)
-        tvLastUpdate = findViewById(R.id.tvActivityRepositoryLastUpdate)
-        pbProgress = findViewById(R.id.pbActivityRepository)
-        tvMessage = findViewById(R.id.tvActivityRepositoryMessage)
 
         api = GithubApiProvider.provideGithubApi(this)
 
@@ -87,30 +70,30 @@ class RepositoryActivity : AppCompatActivity() {
                     // 저장소 소유자의 프로필 사진을 표시합니다.
                     GlideApp.with(this@RepositoryActivity)
                             .load(repo.owner.avatarUrl)
-                            .into(ivProfile)
+                            .into(ivActivityRepositoryProfile)
 
                     // 저장소 정보를 표시합니다.
-                    tvName.text = repo.fullName
-                    tvStars.text = resources
+                    tvActivityRepositoryName.text = repo.fullName
+                    tvActivityRepositoryStars.text = resources
                             .getQuantityString(R.plurals.star, repo.stars, repo.stars)
                     if (null == repo.description) {
-                        tvDescription.setText(R.string.no_description_provided)
+                        tvActivityRepositoryDescription.setText(R.string.no_description_provided)
                     } else {
-                        tvDescription.text = repo.description
+                        tvActivityRepositoryDescription.text = repo.description
                     }
                     if (null == repo.language) {
-                        tvLanguage.setText(R.string.no_language_specified)
+                        tvActivityRepositoryLanguage.setText(R.string.no_language_specified)
                     } else {
-                        tvLanguage.text = repo.language
+                        tvActivityRepositoryLanguage.text = repo.language
                     }
                     try {
                         // 응답에 포함된 마지막 업데이트 시각을 Date 형식으로 변환합니다.
                         val lastUpdate = dateFormatInResponse.parse(repo.updatedAt)
 
                         // 마지막 업데이트 시각을 yyyy-MM-dd HH:mm:ss 형태로 표시합니다.
-                        tvLastUpdate.text = dateFormatToShow.format(lastUpdate)
+                        tvActivityRepositoryLastUpdate.text = dateFormatToShow.format(lastUpdate)
                     } catch (e: ParseException) {
-                        tvLastUpdate.text = getString(R.string.unknown)
+                        tvActivityRepositoryLastUpdate.text = getString(R.string.unknown)
                     }
                 } else {
                     showError("Not successful: " + response.message())
@@ -125,19 +108,19 @@ class RepositoryActivity : AppCompatActivity() {
     }
 
     private fun showProgress() {
-        llContent.visibility = View.GONE
-        pbProgress.visibility = View.VISIBLE
+        llActivityRepositoryContent.visibility = View.GONE
+        pbActivityRepository.visibility = View.VISIBLE
     }
 
     private fun hideProgress(isSucceed: Boolean) {
-        llContent.visibility = if (isSucceed) View.VISIBLE else View.GONE
-        pbProgress.visibility = View.GONE
+        llActivityRepositoryContent.visibility = if (isSucceed) View.VISIBLE else View.GONE
+        pbActivityRepository.visibility = View.GONE
     }
 
     private fun showError(message: String?) {
         // message 가 널 값인 경우 "Unexpected error." 메시지를 표시합니다.
-        tvMessage.text = message ?: "Unexpected error."
-        tvMessage.visibility = View.VISIBLE
+        tvActivityRepositoryMessage.text = message ?: "Unexpected error."
+        tvActivityRepositoryMessage.visibility = View.VISIBLE
     }
 
     // 정적 필드로 정의되어 있던 항목은 동반 객체 내부에 정의됩니다.
