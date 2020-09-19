@@ -1,7 +1,7 @@
-package com.androidhuman.example.simplegithub.ui;
+package com.androidhuman.example.simplegithub.ui
 
-import com.bumptech.glide.annotation.GlideModule;
-import com.bumptech.glide.module.AppGlideModule;
+import com.bumptech.glide.annotation.GlideModule
+import com.bumptech.glide.module.AppGlideModule
 
 /*
  * Glide 4.0 은 기존 버전과 달리 이미지 표시 요청 API 와
@@ -14,6 +14,6 @@ import com.bumptech.glide.module.AppGlideModule;
  * GlideModule 어노테이션을 추가하기만 하면 됩니다.
  */
 @GlideModule
-public class SimpleGithubGlideModule extends AppGlideModule {
+class SimpleGithubGlideModule : AppGlideModule() {
     // Intentionally left blank
 }
