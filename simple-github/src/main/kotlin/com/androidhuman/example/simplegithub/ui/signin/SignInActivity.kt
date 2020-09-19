@@ -6,27 +6,36 @@ import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.widget.Button
-import android.widget.ProgressBar
 import android.widget.Toast
 import com.androidhuman.example.simplegithub.BuildConfig
 import com.androidhuman.example.simplegithub.R
 import com.androidhuman.example.simplegithub.api.AuthApi
-import com.androidhuman.example.simplegithub.api.GithubApiProvider
 import com.androidhuman.example.simplegithub.api.model.GithubAccessToken
+import com.androidhuman.example.simplegithub.api.provideAuthApi
 import com.androidhuman.example.simplegithub.data.AuthTokenProvider
 import com.androidhuman.example.simplegithub.ui.main.MainActivity
+import kotlinx.android.synthetic.main.activity_sign_in.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-import kotlinx.android.synthetic.main.activity_sign_in.*
-
 class SignInActivity : AppCompatActivity() {
 
-    internal lateinit var api: AuthApi
-    internal lateinit var authTokenProvider: AuthTokenProvider
-    internal lateinit var accessTokenCall: Call<GithubAccessToken>
+    // Lazy 프로퍼티를 사용하기 위해 변수(var)에서 값(val)로 바꾼 후 사용합니다.
+    internal val api by lazy { provideAuthApi() }
+
+    internal val authTokenProvider by lazy { AuthTokenProvider(this) }
+
+    // lateinit 은 프로퍼티의 초기화를 객체 생성 시점에 해주지 못하는 경우에만 '피치 못하게' 사용하는 키워드이므로,
+    // 코틀린에서 lateinit 으로 선언된 프로퍼티는 항상 널이 아닌 프로퍼티로 간주합니다.
+    // 즉, 이 프로퍼티를 사용하기 전에 초기화를 수행하지 않았을 때 컴파일 수준에서 이를 확인할 방법이 없습니다.
+    // 따라서 이런 특성을 갖는 프로퍼티는 lateinit 보다는 명시적으로 널 값을 허용하도록 선언해 주는 것이 더 안전합니다.
+    // 이렇게 하면 컴파일 단계에서 프로퍼티의 널 여부를 명시적으로 확인할 수 있게 되므로,
+    // 널 여부에 따라 추가 작업을 수행하기에도 더욱 용이해집니다.
+//    internal lateinit var accessTokenCall: Call<GithubAccessToken>
+
+    // 널 값을 허용하도록 한 후, 초깃값을 명시적으로 null 로 지정합니다.
+    internal var accessTokenCall: Call<GithubAccessToken>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +49,7 @@ class SignInActivity : AppCompatActivity() {
          * 웹피이지는 크롬 커스텀 탭을 사용하여 표시한다.
          */
         // 인스턴스 선언 없이 뷰 ID 를 사용하여 인스턴스에 접근합니다.
-        btnActivitySignInStart.setOnClickListener{
+        btnActivitySignInStart.setOnClickListener {
             val authUri = Uri.Builder().scheme("https").authority("github.com")
                     .appendPath("login")
                     .appendPath("oauth")
@@ -55,8 +64,6 @@ class SignInActivity : AppCompatActivity() {
          * authTokenProvider 를 사용하여 사용자 인증 토큰이 있는지 여부를 확인하고,
          * 만약 인증 토큰이 있다면 메인 액티비티로 이동한다.
          */
-        api = GithubApiProvider.provideAuthApi()
-        authTokenProvider = AuthTokenProvider(this)
         if (null != authTokenProvider.token) {
             launchMainActivity()
         }
@@ -89,6 +96,13 @@ class SignInActivity : AppCompatActivity() {
         getAccessToken(code)
     }
 
+    override fun onStop() {
+        super.onStop()
+        // 액티비티가 화면에서 사라지는 시점에 API 호출 객체가 생성되어 있다면
+        // API 요청을 취소합니다.
+        accessTokenCall?.run { cancel() }
+    }
+
     /*
      * 3. 액세스 토큰 추출
      * 액세스 토큰은 REST API 를 사용하여 발급받으며, Github 애플리케이션의 Client ID 와 Client Secret,
@@ -99,9 +113,11 @@ class SignInActivity : AppCompatActivity() {
         showProgress()
         accessTokenCall = api.getAccessToken(
                 BuildConfig.GITHUB_CLIENT_ID, BuildConfig.GITHUB_CLIENT_SECRET, code)
-
+        // 앞에서 API 호출에 필요한 객체를 받았으므로,
+        // 이 시점에서 accessTokenCall 객체의 값은 널이 아닙니다.
+        // 따라서 비 널 값 보증(!!)을 사용하여 이 객체를 사용합니다.
         // Call 이너페이스를 구현하는 익명 클래스의 인스턴스르 생성합니다.
-        accessTokenCall.enqueue(object : Callback<GithubAccessToken?> {
+        accessTokenCall!!.enqueue(object : Callback<GithubAccessToken?> {
             override fun onResponse(call: Call<GithubAccessToken?>,
                                     response: Response<GithubAccessToken?>) {
                 hideProgress()
