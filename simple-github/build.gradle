@@ -54,6 +54,8 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    // Retrofit 에서 받은 응답을 옵저버블로 변환해주는 라이브러리를 추가합니다.
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
 
     // Glide 4.0의 Generated API 를 위해 필요합니다.
     // Glide 어노테이션 컴파일러가 의존성에 추가되어 있습니다.
@@ -67,4 +69,8 @@ dependencies {
 
     // Anko Commons 라이브러리를 의존성에 추가합니다.
     implementation "org.jetbrains.anko:anko-commons:$ankoVersion"
+
+    // RxAndroid 와 RxJava 라이브러리를 추가합니다.
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 }

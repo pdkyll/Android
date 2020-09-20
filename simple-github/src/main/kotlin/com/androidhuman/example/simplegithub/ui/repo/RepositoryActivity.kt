@@ -7,6 +7,8 @@ import com.androidhuman.example.simplegithub.R
 import com.androidhuman.example.simplegithub.api.model.GithubRepo
 import com.androidhuman.example.simplegithub.api.provideGithubApi
 import com.androidhuman.example.simplegithub.ui.GlideApp
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_repository.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -28,7 +30,10 @@ class RepositoryActivity : AppCompatActivity() {
     internal val api by lazy { provideGithubApi(this) }
 
     // 널 값을 허용하도록 한 후, 초깃값을 명시적으로 null 로 지정합니다.
-    internal var repoCall: Call<GithubRepo>? = null
+//    internal var repoCall: Call<GithubRepo>? = null
+
+    // 여러 디스포저블 객체를 관리할 수 있는 CompositeDisposable 객체를 초기화합니다.
+    internal val disposable = CompositeDisposable()
 
     // REST API 응답에 포함된 날짜 및 시간 표시 형식입니다.
     internal val dateFormatInResponse = SimpleDateFormat(
@@ -61,11 +66,15 @@ class RepositoryActivity : AppCompatActivity() {
         super.onStop()
         // 액티비티가 화면에서 사라지는 시점에 API 호출 객체가 생성되어 있다면
         // API 요청을 취소합니다.
-        repoCall?.run { cancel() }
+//        repoCall?.run { cancel() }
+
+        // 관리하고 있던 디스포저블 객체를 모두 해제합니다.
+        disposable.clear()
     }
 
     private fun showRepositoryInfo(login: String, repoName: String) {
-        showProgress()
+        // Retrofit Call 객체를 사용하였을 때 아래와 같이 사용하였다.
+        /*showProgress()
 
         repoCall = api.getRepository(login, repoName)
 
@@ -116,7 +125,62 @@ class RepositoryActivity : AppCompatActivity() {
                 hideProgress(false)
                 showError(t.message)
             }
-        })
+        })*/
+
+        // REST API 를 통해 저장소 정보를 요청합니다.
+        disposable.add(api.getRepository(login, repoName)
+                // 이 이후에 수행되는 코드는 모두 메인 스레드에서 실행합니다.
+                .observeOn(AndroidSchedulers.mainThread())
+
+                // 구독할 때 수행할 작업을 구현합니다.
+                .doOnSubscribe { showProgress() }
+
+                // 에러가 발생했을 때 수행할 작업을 구현합니다.
+                .doOnError { hideProgress(false) }
+
+                // 스트림이 정상 종료되었을 때 수행할 작업을 구현합니다.
+                .doOnComplete { hideProgress(true) }
+
+                // 옵저버블을 구독합니다.
+                .subscribe({ repo ->
+                    // API 를 통해 저장소 정보를 정상적으로 받았을 때 처리할 작업을 구현합니다.
+                    // 작업 중 오류가 발생하면 이 블록은 호출되지 않씁니다.
+
+                    // 저장소 소유자의 프로필 사진을 표시합니다.
+                    GlideApp.with(this@RepositoryActivity)
+                            .load(repo.owner.avatarUrl)
+                            .into(ivActivityRepositoryProfile)
+
+                    // 저장소 정보를 표시합니다.
+                    tvActivityRepositoryName.text = repo.fullName
+                    tvActivityRepositoryStars.text = resources
+                            .getQuantityString(R.plurals.star, repo.stars, repo.stars)
+                    if (null == repo.description) {
+                        tvActivityRepositoryDescription.setText(R.string.no_description_provided)
+                    } else {
+                        tvActivityRepositoryDescription.text = repo.description
+                    }
+                    if (null == repo.language) {
+                        tvActivityRepositoryLanguage.setText(R.string.no_language_specified)
+                    } else {
+                        tvActivityRepositoryLanguage.text = repo.language
+                    }
+                    try {
+                        // 응답에 포함된 마지막 업데이트 시각을 Date 형식으로 변환합니다.
+                        val lastUpdate = dateFormatInResponse.parse(repo.updatedAt)
+
+                        // 마지막 업데이트 시각을 yyyy-MM-dd HH:mm:ss 형태로 표시합니다.
+                        tvActivityRepositoryLastUpdate.text = dateFormatToShow.format(lastUpdate)
+                    } catch (e: ParseException) {
+                        tvActivityRepositoryLastUpdate.text = getString(R.string.unknown)
+                    }
+                }) {
+                    // 에러 블록
+                    // 네트워크 오류나 데이터 처리 오류 등
+                    // 작업이 정상적으로 완료되지 않았을 때 호출됩니다.
+                    showError(it.message)
+                }
+        )
     }
 
     private fun showProgress() {

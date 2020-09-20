@@ -1,7 +1,6 @@
 package com.androidhuman.example.simplegithub.ui.search
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -11,12 +10,14 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.androidhuman.example.simplegithub.R
-import com.androidhuman.example.simplegithub.api.GithubApi
 import com.androidhuman.example.simplegithub.api.model.GithubRepo
 import com.androidhuman.example.simplegithub.api.model.RepoSearchResponse
 import com.androidhuman.example.simplegithub.api.provideGithubApi
 import com.androidhuman.example.simplegithub.ui.repo.RepositoryActivity
 import com.androidhuman.example.simplegithub.ui.search.SearchAdapter.ItemClickListener
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_search.*
 import org.jetbrains.anko.startActivity
 import retrofit2.Call
@@ -33,7 +34,10 @@ class SearchActivity : AppCompatActivity(), ItemClickListener {
 
     internal val api by lazy { provideGithubApi(this) }
 
-    internal var searchCall: Call<RepoSearchResponse>? = null
+//    internal var searchCall: Call<RepoSearchResponse>? = null
+
+    // 여러 디스포저블 객체를 관리할 수 있는 CompositeDisposable 객체를 초기화합니다.
+    internal val disposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +54,10 @@ class SearchActivity : AppCompatActivity(), ItemClickListener {
         super.onStop()
         // 액티비티가 화면에서 사라지는 시점에 API 호출 객체가 생성되어 있다면
         // API 요청을 취소합니다.
-        searchCall?.run { cancel() }
+//        searchCall?.run { cancel() }
+
+        // 관리하고 있던 디스포저블 객체를 모두 해제합니다.
+        disposable.clear()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -129,7 +136,8 @@ class SearchActivity : AppCompatActivity(), ItemClickListener {
     }
 
     private fun searchRepository(query: String) {
-        clearResults()
+        // Retrofit Call 객체를 사용하였을 때 아래와 같이 사용하였다.
+        /*clearResults()
         hideError()
         showProgress()
 
@@ -163,7 +171,54 @@ class SearchActivity : AppCompatActivity(), ItemClickListener {
                 // t.message 는 널 값을 반환할 수 있다.
                 showError(t.message)
             }
-        })
+        })*/
+
+        // REST API 를 통해 검색 결과를 요청합니다.
+        disposable.add(api.searchRepository(query)
+
+                // Observable 형태로 결과를 바꿔주기 위해 flatMap 을 사용합니다.
+                .flatMap {
+                    if (0 == it.totalCount) {
+                        // 검색 결과가 없을 경우
+                        // 에러를 발생시켜 에러 메시지를 표시하도록 합니다.
+                        // (곧바로 에러 블록이 실행됩니다.)
+                        Observable.error(IllegalStateException("No search result."))
+                    } else {
+                        // 검색 결과 리스트를 다음 스트림으로 전달합니다.
+                        Observable.just(it.items)
+                    }
+                }
+
+                // 이 이후에 수행되는 코드는 모두 메인 스레드에서 실행합니다.
+                // RxAndroid 에서 제공하는 스케줄러인
+                // AndroidSchedulers.mainThread() 를 사용합니다.
+                .observeOn(AndroidSchedulers.mainThread())
+
+                // 구독할 때 수행할 작업을 구현합니다.
+                .doOnSubscribe {
+                    clearResults()
+                    hideError()
+                    showProgress()
+                }
+
+                // 스트림이 종료될 때 수행할 작업을 구현합니다.
+                .doOnTerminate { hideProgress() }
+
+                // 옵저버블을 구독합니다. items : List<GithubRepo>
+                .subscribe({ items ->
+                    // API 를 통해 검색 결과를 정상적으로 받았을 때 처리할 작업을 구현합니다.
+                    // 작업 중 오류가 발생하면 이 블록은 호출되지 않습니다.
+                    with(adapter) {
+                        setItems(items)
+                        notifyDataSetChanged()
+                    }
+                }) {
+                    // 에러 블록
+                    // 네트워크 오류나 데이터 처리 오류 등
+                    // 작업이 정상적으로 완료되지 않았을 때 호출됩니다.
+                    showError(it.message)
+                }
+        )
     }
 
     private fun updateTitle(query: String) {

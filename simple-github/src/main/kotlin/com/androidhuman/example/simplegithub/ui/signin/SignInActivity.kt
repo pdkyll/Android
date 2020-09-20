@@ -14,6 +14,8 @@ import com.androidhuman.example.simplegithub.api.model.GithubAccessToken
 import com.androidhuman.example.simplegithub.api.provideAuthApi
 import com.androidhuman.example.simplegithub.data.AuthTokenProvider
 import com.androidhuman.example.simplegithub.ui.main.MainActivity
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_sign_in.*
 import org.jetbrains.anko.clearTask
 import org.jetbrains.anko.intentFor
@@ -39,7 +41,10 @@ class SignInActivity : AppCompatActivity() {
 //    internal lateinit var accessTokenCall: Call<GithubAccessToken>
 
     // 널 값을 허용하도록 한 후, 초깃값을 명시적으로 null 로 지정합니다.
-    internal var accessTokenCall: Call<GithubAccessToken>? = null
+//    internal var accessTokenCall: Call<GithubAccessToken>? = null
+
+    // 여러 디스포저블 객체를 관리할 수 있는 CompositeDisposable 객체를 초기화합니다.
+    internal val disposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,7 +109,11 @@ class SignInActivity : AppCompatActivity() {
         super.onStop()
         // 액티비티가 화면에서 사라지는 시점에 API 호출 객체가 생성되어 있다면
         // API 요청을 취소합니다.
-        accessTokenCall?.run { cancel() }
+//        accessTokenCall?.run { cancel() }
+
+        // 관리하고 있던 디스포저블 객체 모두 해제합니다.
+        // 해제되는 시점에 진행 중인 네트워크 요청이 있었다면 자동으로 취소됩니다.
+        disposable.clear()
     }
 
     /*
@@ -114,7 +123,8 @@ class SignInActivity : AppCompatActivity() {
      * 액세스 토큰을 정상적으로 발급받았다면 이후 이를 계속 사용할 수 있도록 저장한 후 메인 액티비티로 이동합니다.
      */
     private fun getAccessToken(code: String) {
-        showProgress()
+        // Retrofit Call 객체를 사용했을 때는 아래와 같이 사용합니다.
+        /*showProgress()
         accessTokenCall = api.getAccessToken(
                 BuildConfig.GITHUB_CLIENT_ID, BuildConfig.GITHUB_CLIENT_SECRET, code)
         // 앞에서 API 호출에 필요한 객체를 받았으므로,
@@ -139,7 +149,39 @@ class SignInActivity : AppCompatActivity() {
                 hideProgress()
                 showError(t)
             }
-        })
+        })*/
+
+        // REST API 를 통해 액세스 토큰을 요청합니다.
+        disposable.add(api.getAccessToken(
+                BuildConfig.GITHUB_CLIENT_ID, BuildConfig.GITHUB_CLIENT_SECRET, code)
+
+                // REST APIP 를 통해 받은 응답에서 액세스 토큰만 추출합니다.
+                .map { it.accessToken }
+
+                // 이 이후에 수행되는 코드는 모두 메인 스레드에서 실행합니다.
+                // RxAndroid 에서 제공하는 스케줄러인
+                // AndroidSchedulers.mainThread() 를 사용합니다.
+                .observeOn(AndroidSchedulers.mainThread())
+
+                // 구독할 때 수행할 작업을 구현합니다.
+                .doOnSubscribe { showProgress() }
+
+                // 스트림이 종료될 때 수행할 작업을 구현합니다.
+                .doOnTerminate { hideProgress() }
+
+                // 옵저버블을 구독합니다.
+                .subscribe({ token ->
+                    // API 를 통해 액세스 토큰을 정상적으로 받았을 때 처리할 작업을 구현합니다.
+                    // 작업 중 오류가 발생하면 이 블록은 호출되지 않습니다.
+                    authTokenProvider.updateToken(token)
+                    launchMainActivity()
+                }) {
+                    // 에러 블록
+                    // 네트워크 오류나 데이터 처리 오류 등
+                    // 작업이 정상적으로 완료되지 않았을 때 호출됩니다.
+                    showError(it)
+                }
+        )
     }
 
     private fun showProgress() {
