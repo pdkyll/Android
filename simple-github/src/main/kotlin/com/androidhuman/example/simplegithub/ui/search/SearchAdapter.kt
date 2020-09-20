@@ -2,7 +2,7 @@ package com.androidhuman.example.simplegithub.ui.search
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -15,7 +15,7 @@ import java.util.*
 import kotlinx.android.synthetic.main.item_repository.*
 import kotlinx.android.synthetic.main.item_repository.view.*
 
-class SearchAdapter : RecyclerView.Adapter<SearchAdapter.RepositoryHolder>() {
+class SearchAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<SearchAdapter.RepositoryHolder>() {
 
     // 초깃값을 빈 MutableList 로 할당합니다.
     private var items: MutableList<GithubRepo> = mutableListOf()
@@ -72,7 +72,7 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.RepositoryHolder>() {
         items.clear()
     }
 
-    class RepositoryHolder(parent: ViewGroup) : RecyclerView.ViewHolder(LayoutInflater.from(parent.context)
+    class RepositoryHolder(parent: ViewGroup) : androidx.recyclerview.widget.RecyclerView.ViewHolder(LayoutInflater.from(parent.context)
             .inflate(R.layout.item_repository, parent, false))
 
     interface ItemClickListener {

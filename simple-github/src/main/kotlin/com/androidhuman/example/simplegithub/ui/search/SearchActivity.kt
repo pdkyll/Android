@@ -2,9 +2,8 @@ package com.androidhuman.example.simplegithub.ui.search
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.SearchView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -14,14 +13,14 @@ import com.androidhuman.example.simplegithub.api.model.GithubRepo
 import com.androidhuman.example.simplegithub.api.provideGithubApi
 import com.androidhuman.example.simplegithub.extensions.plusAssign
 import com.androidhuman.example.simplegithub.ui.repo.RepositoryActivity
-import com.androidhuman.example.simplegithub.ui.search.SearchAdapter.ItemClickListener
+import com.jakewharton.rxbinding3.appcompat.queryTextChangeEvents
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_search.*
 import org.jetbrains.anko.startActivity
 
-class SearchActivity : AppCompatActivity(), ItemClickListener {
+class SearchActivity : AppCompatActivity(), SearchAdapter.ItemClickListener {
 
     internal lateinit var menuSearch: MenuItem
 
@@ -36,13 +35,16 @@ class SearchActivity : AppCompatActivity(), ItemClickListener {
     // 여러 디스포저블 객체를 관리할 수 있는 CompositeDisposable 객체를 초기화합니다.
     internal val disposable = CompositeDisposable()
 
+    // viewDisposables 프로퍼티를 추가합니다.
+    internal val viewDisposable = CompositeDisposable()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
         // with() 함수를 사용하여 rvActivitySearchList 범위 내에서 작업을 수행합니다.
         with(rvActivitySearchList) {
-            layoutManager = LinearLayoutManager(this@SearchActivity)
+            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@SearchActivity)
             adapter = this@SearchActivity.adapter
         }
     }
@@ -55,6 +57,13 @@ class SearchActivity : AppCompatActivity(), ItemClickListener {
 
         // 관리하고 있던 디스포저블 객체를 모두 해제합니다.
         disposable.clear()
+
+        // 액티비티가 완전히 종료되는 경우에만 관리하고 있는 디스포저블을 해제합니다.
+        // 화면이 꺼지거나 다른 액티비티를 호출하여 액티비티가 화면에서 사라지는 경우에는
+        // 해제하지 않습니다.
+        if (isFinishing) {
+            viewDisposable.clear()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -67,21 +76,34 @@ class SearchActivity : AppCompatActivity(), ItemClickListener {
         // 익명 클래스의 인스턴스를 생성합니다.
         // apply() 함수를 사용하여 객체 생성과 리스터 지정을 동시에 수행합니다.
         // menuSearch.actionView 를 SearchView 로 캐스팅합니다.
-        searchView = (menuSearch.actionView as SearchView).apply {
-            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String): Boolean {
+        searchView = (menuSearch.actionView as SearchView)
+
+        // SearchView 에서 발생하는 이벤트를 옵저버블 형태로 받습니다.
+        viewDisposable += searchView.queryTextChangeEvents()
+                // 검색을 수행했을 떄 발생한 이벤트만 받습니다.
+                .filter { it.isSubmitted }
+
+                // 이벤트에서 검색어 텍스트(CharSequence)를 추출합니다.
+                .map { it.queryText }
+
+                // 빈 문자열이 아닌 검색어만 받습니다.
+                .filter { it.isNotEmpty() }
+
+                // 검색어를 String 형태로 변환합니다.
+                .map { it.toString() }
+
+                // 이 이후에 수행되는 코드는 모두 메인 스레드에서 실행합니다.
+                // RxAndroid 에서 제공하는 스케줄러인 AndroidSchedulers.mainThread() 를 사용합니다.
+                .observeOn(AndroidSchedulers.mainThread())
+
+                // 옵저버블을 구독합니다.
+                .subscribe{ query ->
+                    // 검색 절차를 수행합니다.
                     updateTitle(query)
                     hideSoftKeyboard()
                     collapseSearchView()
                     searchRepository(query)
-                    return true
                 }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    return false
-                }
-            })
-        }
 
         // with() 함수를 사용하여 menuSearch 범위 내에서 작업을 수행합니다.
         with(menuSearch) {

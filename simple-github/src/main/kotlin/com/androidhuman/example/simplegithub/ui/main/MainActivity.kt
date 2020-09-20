@@ -1,7 +1,7 @@
 package com.androidhuman.example.simplegithub.ui.main
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.androidhuman.example.simplegithub.R
 import com.androidhuman.example.simplegithub.ui.search.SearchActivity
 import kotlinx.android.synthetic.main.activity_main.*
