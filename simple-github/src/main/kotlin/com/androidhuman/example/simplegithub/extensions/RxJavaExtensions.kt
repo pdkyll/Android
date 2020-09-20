@@ -1,6 +1,6 @@
 package com.androidhuman.example.simplegithub.extensions
 
-import io.reactivex.disposables.CompositeDisposable
+import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
 import io.reactivex.disposables.Disposable
 
 /*
@@ -12,7 +12,7 @@ import io.reactivex.disposables.Disposable
  * 더 직관적이면서도 편리하게 코드를 작성할 수 있습니다.
  */
 // CompositeDisposable 의 '+=' 연산자 뒤에 Disposable 타입이 오는 경우를 재정의합니다.
-operator fun CompositeDisposable.plusAssign(disposable: Disposable) {
+operator fun AutoClearedDisposable.plusAssign(disposable: Disposable) {
 
     // CompositeDisposable.add() 함수를 호출합니다.
     this.add(disposable)

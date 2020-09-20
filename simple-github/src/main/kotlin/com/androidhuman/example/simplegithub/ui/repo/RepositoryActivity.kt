@@ -6,6 +6,7 @@ import android.view.View
 import com.androidhuman.example.simplegithub.R
 import com.androidhuman.example.simplegithub.api.provideGithubApi
 import com.androidhuman.example.simplegithub.extensions.plusAssign
+import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
 import com.androidhuman.example.simplegithub.ui.GlideApp
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -30,7 +31,8 @@ class RepositoryActivity : AppCompatActivity() {
 //    internal var repoCall: Call<GithubRepo>? = null
 
     // 여러 디스포저블 객체를 관리할 수 있는 CompositeDisposable 객체를 초기화합니다.
-    internal val disposable = CompositeDisposable()
+    // CompositeDisposable 에서 AutoClearedDisposable 로 변경합니다.
+    internal val disposable = AutoClearedDisposable(this)
 
     // REST API 응답에 포함된 날짜 및 시간 표시 형식입니다.
     internal val dateFormatInResponse = SimpleDateFormat(
@@ -43,6 +45,10 @@ class RepositoryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_repository)
+
+        // Lifecycle.addObserver() 함수를 사용하여
+        // AutoClearedDisposable 객체를 옵저버로 등록합니다.
+        lifecycle += disposable
 
         // 액티비티 호출 시 전달받은 사용자 이름과 저장소 이름을 추출합니다.
         // 엘비스 연산자를 사용하여 널 값을 검사합니다.
@@ -59,15 +65,16 @@ class RepositoryActivity : AppCompatActivity() {
         showRepositoryInfo(login, repo)
     }
 
-    override fun onStop() {
-        super.onStop()
-        // 액티비티가 화면에서 사라지는 시점에 API 호출 객체가 생성되어 있다면
-        // API 요청을 취소합니다.
-//        repoCall?.run { cancel() }
-
-        // 관리하고 있던 디스포저블 객체를 모두 해제합니다.
-        disposable.clear()
-    }
+    // onStop() 함수는 더 이상 오버라이드하지 않아도 됩니다.
+//    override fun onStop() {
+//        super.onStop()
+//        // 액티비티가 화면에서 사라지는 시점에 API 호출 객체가 생성되어 있다면
+//        // API 요청을 취소합니다.
+////        repoCall?.run { cancel() }
+//
+//        // 관리하고 있던 디스포저블 객체를 모두 해제합니다.
+//        disposable.clear()
+//    }
 
     private fun showRepositoryInfo(login: String, repoName: String) {
         // Retrofit Call 객체를 사용하였을 때 아래와 같이 사용하였다.

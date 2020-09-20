@@ -78,4 +78,10 @@ dependencies {
     // androidX 로 마이그레이션 하여 -7 이 아닌 androidX 지원 버전으로 적용하였다.
 //    implementation "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:$rxBindingVersion"
     implementation "com.jakewharton.rxbinding3:rxbinding-appcompat:$rxBindingVersion"
+
+    // 안드로이드 아키첵처 컴포넌트를 위한 의존성을 추가합니다.
+    // Lifecycles only (without ViewModel or LiveData)
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    // Annotation processor
+    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 }
