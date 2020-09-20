@@ -18,6 +18,7 @@ import com.androidhuman.example.simplegithub.api.provideGithubApi
 import com.androidhuman.example.simplegithub.ui.repo.RepositoryActivity
 import com.androidhuman.example.simplegithub.ui.search.SearchAdapter.ItemClickListener
 import kotlinx.android.synthetic.main.activity_search.*
+import org.jetbrains.anko.startActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -111,11 +112,20 @@ class SearchActivity : AppCompatActivity(), ItemClickListener {
     override fun onItemClick(repository: GithubRepo) {
         // 검색 결과를 선택하면 자세한 정보를 표시하는 액티비티를 실행합니다.
         // apply() 함수를 사용하여 객체 생성과 extra 를 추가하는 작업을 동시에 수행합니다.
-        val intent = Intent(this, RepositoryActivity::class.java).apply {
+        /*val intent = Intent(this, RepositoryActivity::class.java).apply {
+
+            // 인텐트 부가 정보에 저장소 소유자 정보와 저자오 이름을 추가합니다.
             putExtra(RepositoryActivity.KEY_USER_LOGIN, repository.owner.login)
             putExtra(RepositoryActivity.KEY_REPO_NAME, repository.name)
         }
-        startActivity(intent)
+        startActivity(intent)*/
+
+        // --> Anko 를 사용하여 코드를 간결화하면 아래와 같다.
+        // 부가정보로 전달할 항목을 함수의 인자로 바로 넣어줍니다.
+        startActivity<RepositoryActivity>(
+                RepositoryActivity.KEY_USER_LOGIN to repository.owner.login,
+                RepositoryActivity.KEY_REPO_NAME to repository.name
+        )
     }
 
     private fun searchRepository(query: String) {

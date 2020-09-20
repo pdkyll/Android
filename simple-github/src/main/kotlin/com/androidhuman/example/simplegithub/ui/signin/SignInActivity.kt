@@ -15,6 +15,10 @@ import com.androidhuman.example.simplegithub.api.provideAuthApi
 import com.androidhuman.example.simplegithub.data.AuthTokenProvider
 import com.androidhuman.example.simplegithub.ui.main.MainActivity
 import kotlinx.android.synthetic.main.activity_sign_in.*
+import org.jetbrains.anko.clearTask
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.longToast
+import org.jetbrains.anko.newTask
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -149,13 +153,11 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun showError(throwable: Throwable) {
-        Toast.makeText(this, throwable.message, Toast.LENGTH_LONG).show()
+        // 긴 시간 동안 표시되는 토스트 메시지를 출력합니다.
+        longToast(throwable.message ?: "No message available")
     }
 
     private fun launchMainActivity() {
-        startActivity(Intent(
-                this@SignInActivity, MainActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        startActivity(intentFor<MainActivity>().clearTask().newTask())
     }
 }

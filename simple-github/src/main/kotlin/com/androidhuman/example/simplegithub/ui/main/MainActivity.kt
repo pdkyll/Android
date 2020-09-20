@@ -1,11 +1,11 @@
 package com.androidhuman.example.simplegithub.ui.main
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.androidhuman.example.simplegithub.R
 import com.androidhuman.example.simplegithub.ui.search.SearchActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.startActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,7 +14,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         btnActivityMainSearch.setOnClickListener { // 저장소 검색 액티비티를 호출합니다.
-            startActivity(Intent(this@MainActivity, SearchActivity::class.java))
+            // 호출할 액티비티만 명시합니다.
+            startActivity<SearchActivity>()
         }
     }
 }
