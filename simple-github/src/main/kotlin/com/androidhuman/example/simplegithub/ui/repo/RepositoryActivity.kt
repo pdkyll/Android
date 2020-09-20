@@ -4,15 +4,12 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.androidhuman.example.simplegithub.R
-import com.androidhuman.example.simplegithub.api.model.GithubRepo
 import com.androidhuman.example.simplegithub.api.provideGithubApi
+import com.androidhuman.example.simplegithub.extensions.plusAssign
 import com.androidhuman.example.simplegithub.ui.GlideApp
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_repository.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -128,7 +125,8 @@ class RepositoryActivity : AppCompatActivity() {
         })*/
 
         // REST API 를 통해 저장소 정보를 요청합니다.
-        disposable.add(api.getRepository(login, repoName)
+        // '+=' 연산자로 디스포저블을 CompositeDisposable 에 추가합니다.
+        disposable += api.getRepository(login, repoName)
                 // 이 이후에 수행되는 코드는 모두 메인 스레드에서 실행합니다.
                 .observeOn(AndroidSchedulers.mainThread())
 
@@ -180,7 +178,7 @@ class RepositoryActivity : AppCompatActivity() {
                     // 작업이 정상적으로 완료되지 않았을 때 호출됩니다.
                     showError(it.message)
                 }
-        )
+
     }
 
     private fun showProgress() {

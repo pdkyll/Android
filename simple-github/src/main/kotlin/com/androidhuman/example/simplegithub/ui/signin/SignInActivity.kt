@@ -6,13 +6,11 @@ import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.widget.Toast
 import com.androidhuman.example.simplegithub.BuildConfig
 import com.androidhuman.example.simplegithub.R
-import com.androidhuman.example.simplegithub.api.AuthApi
-import com.androidhuman.example.simplegithub.api.model.GithubAccessToken
 import com.androidhuman.example.simplegithub.api.provideAuthApi
 import com.androidhuman.example.simplegithub.data.AuthTokenProvider
+import com.androidhuman.example.simplegithub.extensions.plusAssign
 import com.androidhuman.example.simplegithub.ui.main.MainActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -21,9 +19,6 @@ import org.jetbrains.anko.clearTask
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.newTask
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class SignInActivity : AppCompatActivity() {
 
@@ -152,7 +147,8 @@ class SignInActivity : AppCompatActivity() {
         })*/
 
         // REST API 를 통해 액세스 토큰을 요청합니다.
-        disposable.add(api.getAccessToken(
+        // '+=' 연산자로 디스포저블을 CompositeDisposable 에 추가합니다.
+        disposable += api.getAccessToken(
                 BuildConfig.GITHUB_CLIENT_ID, BuildConfig.GITHUB_CLIENT_SECRET, code)
 
                 // REST APIP 를 통해 받은 응답에서 액세스 토큰만 추출합니다.
@@ -181,7 +177,7 @@ class SignInActivity : AppCompatActivity() {
                     // 작업이 정상적으로 완료되지 않았을 때 호출됩니다.
                     showError(it)
                 }
-        )
+
     }
 
     private fun showProgress() {
