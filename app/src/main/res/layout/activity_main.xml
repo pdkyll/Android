@@ -75,8 +75,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/mkdir_btn"
-        android:text="mkdir"
+        android:id="@+id/run_constructor_btn"
+        android:text="run const"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/model_btn" />
 

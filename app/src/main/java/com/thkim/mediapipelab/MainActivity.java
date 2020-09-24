@@ -95,31 +95,40 @@ public class MainActivity extends AppCompatActivity {
 
         DownloadService downloadService = new DownloadService(this);
 
-        downloadService.downloadJniFor64();
+
+//        downloadService.downloadJniFor64();
+//        downloadService.downloadModel(DownloadService.objectTrackingModel, DownloadService.objectTrackingLabel);
 
         filePath = new File(getExternalCacheDir() + File.separator + arm64_v8a).toString();
 
-        // Load all native libraries needed by the app.
-        try {
-            System.load(filePath + "/" + mpJni);
-            System.load(filePath + "/" + openCVJni);
-        } catch (Exception e ) {
-            e.printStackTrace();
-        }
+        downloadService.onItemDownloadedListener(new DownloadListener() {
+            @Override
+            public void itemDownloadedListener() {
+                Log.d(TAG, "download is done");
+            }
+        });
 
-        AndroidAssetUtil.initializeNativeAssetManager(this);
+        // Load all native libraries needed by the app.
+//        try {
+//            System.load(getCacheDir().getAbsolutePath() + File.separator + openCVJni);
+//            System.load(getCacheDir().getAbsolutePath() + File.separator + mpJni);
+//        } catch (Exception e ) {
+//            e.printStackTrace();
+//        }
+
+//        AndroidAssetUtil.initializeNativeAssetManager(this);
 
         Log.d(TAG, Environment.getExternalStorageDirectory().getPath());
         Log.d(TAG, this.getCacheDir().getAbsolutePath());
-
         Log.d(TAG, this.getFilesDir().getPath());
 
-        eglManager = new EglManager(null);
+//        eglManager = new EglManager(null);
 
-        processor = new FrameProcessor(this, BINARY_GRAPH_NAME);
+//        processor = new FrameProcessor(this, BINARY_GRAPH_NAME);
 
         PermissionHelper.checkAndRequestCameraPermissions(this);
 
+//        DownloadService downloadService = new DownloadService(this);
 
 
         startButton = findViewById(R.id.start_btn);
@@ -147,18 +156,28 @@ public class MainActivity extends AppCompatActivity {
 //                startFileDownload();
 //                downloadFile();
 
-                downloadService.downloadModel();
+                downloadService.downloadJniFor64();
+//                downloadService.downloadModel(DownloadService.objectTrackingModel, DownloadService.objectTrackingLabel);
+                downloadService.downloadModel(DownloadService.objectTrackingModel, DownloadService.objectTrackingLabel);
 
             }
         });
 
-        Button mkdirBtn = findViewById(R.id.mkdir_btn);
+        Button mkdirBtn = findViewById(R.id.run_constructor_btn);
         mkdirBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                makeDirectory("mediapipe_asset_cache");
-                downloadService.downloadJniFor64();
+                // 요청하기 전에 먼저 파일 겁사.
+//                downloadService.downloadJniFor64();
 
+                System.load(getCacheDir().getAbsolutePath() + File.separator + openCVJni);
+                System.load(getCacheDir().getAbsolutePath() + File.separator + mpJni);
+                AndroidAssetUtil.initializeNativeAssetManager(MainActivity.this);
+                eglManager = new EglManager(null);
+                processor = new FrameProcessor(MainActivity.this, BINARY_GRAPH_NAME);
+                converter = new ExternalTextureConverter(eglManager.getContext());
+                converter.setFlipY(FLIP_FRAMES_VERTICALLY);
             }
         });
 
@@ -341,23 +360,25 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
     }
 
-    @Override
-    protected void onResume() {
-        Log.d(TAG, "onResume()");
-        super.onResume();
-        converter = new ExternalTextureConverter(eglManager.getContext());
-//        converter = new CustomExternalTextureConverter(eglManager.getContext(), 2, 270);
-        converter.setFlipY(FLIP_FRAMES_VERTICALLY);
-//        converter.setConsumer(processor);
-
-//        startCamera();
-    }
+//    @Override
+//    protected void onResume() {
+//        Log.d(TAG, "onResume()");
+//        super.onResume();
+////        converter = new ExternalTextureConverter(eglManager.getContext());
+////        converter = new CustomExternalTextureConverter(eglManager.getContext(), 2, 270);
+////        converter.setFlipY(FLIP_FRAMES_VERTICALLY);
+////        converter.setConsumer(processor);
+//
+////        startCamera();
+//    }
 
     @Override
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause()");
-        converter.close();
+        if (converter != null) {
+            converter.close();
+        }
     }
 
     @Override

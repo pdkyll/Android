@@ -5,10 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.thkim.mediapipelab.api.provideJniDownApi
 import com.thkim.mediapipelab.api.provideModelDownApi
 import com.thkim.mediapipelab.rx.AutoClearedDisposable
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.ResponseBody
-import org.jetbrains.anko.toast
 import java.io.*
 
 /*
@@ -18,18 +17,25 @@ class DownloadService(private val activity: AppCompatActivity) {
 
     companion object {
         private const val TAG: String = "DownloadService"
+
+        const val objectTrackingModel: String = "ssdlite_object_detection.tflite"
+        const val objectTrackingLabel: String = "ssdlite_object_detection_labelmap.txt"
+
+        const val faceDetectionModel: String = "face_detection_front.tflite"
+        const val faceDetectionLabel: String = "face_detection_labelmap.txt"
+
+        const val faceMeshModel: String = "face_landmark.tflite"
+
+        const val hairSegmentationModel: String = "hair_segmentation.tflite"
+
+        const val poseDetectionModel: String = "pose_detection.tflite"
+
+        const val poseLandmarkModel: String = "pose_landmark_upper_body.tflite"
     }
 
-    private val assetCacheName: String = "mediapipe_asset_cache"
-    private val jniFolderName: String = "jni"
-    private val arm64_v8a: String = "arm64-v8a"
-    private val armeabi_v7a: String = "armeabi-v7a"
 
-    private val modelName: String = "ssdlite_object_detection.tflite"
-    private val modelTxt: String = "ssdlite_object_detection_labelmap.txt"
-
-    private val mpJni: String = "libmediapipe_jni.so"
-    private val openCVJni: String = "libopencv_java3.so"
+    private val mpJniName: String = "libmediapipe_jni.so"
+    private val openCVJniName: String = "libopencv_java3.so"
 
     internal val modelApi by lazy { provideModelDownApi() }
 
@@ -37,85 +43,86 @@ class DownloadService(private val activity: AppCompatActivity) {
 
     internal val disposable = AutoClearedDisposable(activity)
 
+    lateinit var downloadListener: DownloadListener
+
     init {
         activity.lifecycle.addObserver(disposable)
     }
 
-    fun downloadModel() {
-        disposable.add(modelApi.downloadOTModel()
-                .observeOn(Schedulers.io())
+    fun onItemDownloadedListener(downloadListener: DownloadListener) {
+        this@DownloadService.downloadListener = downloadListener
+    }
+
+    fun downloadModel(model: String, label: String? = null) {
+        disposable.add(modelApi.downloadModel(model)
                 .doOnSubscribe { }
                 .doOnComplete { }
+                .observeOn(Schedulers.io())
                 .subscribe({ body ->
-                    writeResponseBody(body, modelName, assetCacheName)
+                    writeResponseBody(body, model)
                 }) {
                     it.message
-                    Log.d(TAG, "Fail to download .tflite model.")
                 })
 
-        disposable.add(modelApi.downloadOTFile()
-                .observeOn(Schedulers.io())
-                .doOnSubscribe { }
-                .doOnComplete { }
-                .subscribe({ body ->
-                    writeResponseBody(body, modelTxt, assetCacheName)
-                }) {
-                    it.message
-                    Log.d(TAG, "Fail to download .txt file.")
-                })
+        if (label != null) {
+            disposable.add(modelApi.downloadModel(label)
+                    .observeOn(Schedulers.io())
+                    .subscribe({ body ->
+                        writeResponseBody(body, label)
+                    }) {
+                        it.message
+                    })
+        }
     }
 
     fun downloadJniFor64() {
-        disposable.add(jniApi.downloadMPJniFor64()
+        disposable.add(jniApi.downloadJniFor64(mpJniName)
                 .observeOn(Schedulers.io())
                 .doOnSubscribe { }
-                .doOnComplete { }
+                .doOnComplete { downloadListener.itemDownloadedListener() }
                 .subscribe({ body ->
-                    writeResponseBody(body, mpJni, arm64_v8a)
+                    writeResponseBody(body, mpJniName)
                 }) {
                     Log.d(TAG, "Fail to download mp jni for 64 file.")
                 })
 
-        disposable.add(jniApi.downloadOpenCVJniFor64()
+        disposable.add(jniApi.downloadJniFor64(openCVJniName)
                 .observeOn(Schedulers.io())
                 .doOnSubscribe { }
-                .doOnComplete { }
+                .doOnComplete { downloadListener.itemDownloadedListener() }
                 .subscribe({ body ->
-                    writeResponseBody(body, openCVJni, arm64_v8a)
+                    writeResponseBody(body, openCVJniName)
                 }) {
                     Log.d(TAG, "Fail to download mp jni for 64 file.")
                 })
     }
 
     fun downloadJniFor32() {
-        disposable.add(jniApi.downloadMPJniFor32()
+        disposable.add(jniApi.downloadJniFor32(mpJniName)
                 .observeOn(Schedulers.io())
                 .doOnSubscribe { }
-                .doOnComplete { }
+                .doOnComplete { downloadListener.itemDownloadedListener() }
                 .subscribe({ body ->
-                    writeResponseBody(body, mpJni, armeabi_v7a)
+                    writeResponseBody(body, mpJniName)
                 }) {
                     Log.d(TAG, "Fail to download openCV jni for 32 file.")
                 })
 
-        disposable.add(jniApi.downloadOpenCVJniFor32()
+        disposable.add(jniApi.downloadJniFor32(openCVJniName)
                 .observeOn(Schedulers.io())
                 .doOnSubscribe { }
-                .doOnComplete { }
+                .doOnComplete { downloadListener.itemDownloadedListener() }
                 .subscribe({ body ->
-                    writeResponseBody(body, openCVJni, armeabi_v7a)
+                    writeResponseBody(body, openCVJniName)
                 }) {
                     Log.d(TAG, "Fail to download openCV jni for 32 file.")
                 })
     }
 
-
-    private fun writeResponseBody(body: ResponseBody, fileName: String, dir: String) {
+    private fun writeResponseBody(body: ResponseBody, fileName: String?) {
         try {
-            makeDirectory(dir)
-            val modelFile = File(activity.externalCacheDir.toString()
+            val modelFile = File(activity.cacheDir.absolutePath
                     + File.separator
-                    + dir
                     + "/"
                     + fileName)
             Log.d(TAG, modelFile.toString())
@@ -158,14 +165,15 @@ class DownloadService(private val activity: AppCompatActivity) {
             return
         }
     }
+}
 
-    private fun makeDirectory(folderName: String): Boolean {
-        val dir = File(activity.externalCacheDir.toString() + File.separator + folderName)
-        if (!dir.exists()) {
-            return dir.mkdir()
-        }
-        return false
+interface DownloadListener {
+    //    fun itemDownloadingListener()
+    fun itemDownloadedListener()
+}
+
+abstract class DownloadManager {
+    fun itemIsDone() {
+        Log.d("TAG", "item is done")
     }
-
-
 }
