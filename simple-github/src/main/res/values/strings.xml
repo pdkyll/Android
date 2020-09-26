@@ -13,4 +13,7 @@
     <string name="start_with_github">Start with Github</string>
     <string name="unknown">Unknown</string>
     <string name="view_repository">View repository</string>
+
+    <!--  새 문자열 리소스를 추가합니다.  -->
+    <string name="clear_all">Clear all</string>
 </resources>

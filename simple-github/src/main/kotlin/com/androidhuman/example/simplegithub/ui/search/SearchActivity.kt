@@ -2,22 +2,23 @@ package com.androidhuman.example.simplegithub.ui.search
 
 import android.content.Context
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import com.androidhuman.example.simplegithub.R
 import com.androidhuman.example.simplegithub.api.model.GithubRepo
 import com.androidhuman.example.simplegithub.api.provideGithubApi
+import com.androidhuman.example.simplegithub.data.provideSearchHistoryDao
 import com.androidhuman.example.simplegithub.extensions.plusAssign
+import com.androidhuman.example.simplegithub.extensions.runOnIoScheduler
 import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
 import com.androidhuman.example.simplegithub.ui.repo.RepositoryActivity
 import com.jakewharton.rxbinding3.appcompat.queryTextChangeEvents
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_search.*
 import org.jetbrains.anko.startActivity
 
@@ -40,7 +41,10 @@ class SearchActivity : AppCompatActivity(), SearchAdapter.ItemClickListener {
     // viewDisposables 프로퍼티를 추가합니다.
     // CompositeDisposable 에서 AutoClearedDisposable 로 변경합니다.
     internal val viewDisposable = AutoClearedDisposable(lifecycleOwner = this,
-                                                        alwaysClearOnStop = false)
+            alwaysClearOnStop = false)
+
+    // SearchHistoryDao 의 인스턴스를 받아옵니다.
+    internal val searchHistoryDao by lazy { provideSearchHistoryDao(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,7 +110,7 @@ class SearchActivity : AppCompatActivity(), SearchAdapter.ItemClickListener {
                 .observeOn(AndroidSchedulers.mainThread())
 
                 // 옵저버블을 구독합니다.
-                .subscribe{ query ->
+                .subscribe { query ->
                     // 검색 절차를 수행합니다.
                     updateTitle(query)
                     hideSoftKeyboard()
@@ -154,6 +158,21 @@ class SearchActivity : AppCompatActivity(), SearchAdapter.ItemClickListener {
             putExtra(RepositoryActivity.KEY_REPO_NAME, repository.name)
         }
         startActivity(intent)*/
+
+        // 데이터베이스에 저장소를 추가합니다
+        // 데이터 조작 코드를 메인 스레드에서 호출하면 에러가 발생하므로,
+        // RxJava 의 Completable 을 사용하여
+        // IO 스레드에서 데이터 추가 작업을 수행하도록 합니다.
+        // Completable : 옵저버블의 한 종류이며, 일반적인 Observable 과 달리
+        //               이벤트 스트림에 자료를 전달하지 않습니다. 따라서
+        //               SearchHistoryDao.add() 함수처럼 반환하는 값이 없는
+        //               작업을 옵저버블 혀태로 표현할 때 유용합니다.
+        /*disposable += Completable
+                .fromCallable { searchHistoryDao.add(repository) }
+                .subscribeOn(Schedulers.io())
+                .subscribe()*/
+        // runOnIoScheduler 함수로 IO 스케줄러에서 실행할 작업을 간단히 표현합니다.
+        disposable += runOnIoScheduler { searchHistoryDao.add(repository) }
 
         // --> Anko 를 사용하여 코드를 간결화하면 아래와 같다.
         // 부가정보로 전달할 항목을 함수의 인자로 바로 넣어줍니다.

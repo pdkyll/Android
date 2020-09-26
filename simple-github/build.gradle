@@ -84,4 +84,13 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     // Annotation processor
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+
+    // 룸 라이브러리를 추가합니다.
+    implementation "android.arch.persistence.room:runtime:$archComponentVersion"
+
+    // 룸 라이브러리 RxJava 플러그인을 추가합니다.
+    implementation "android.arch.persistence.room:rxjava2:$archComponentVersion"
+
+    // 룸 라이브러리용 어노테이션 프로세서를 추가합니다.
+    kapt "android.arch.persistence.room:compiler:$archComponentVersion"
 }

@@ -24,4 +24,6 @@ ext {
     // 사용할 아키텍처 컴포넌트 버전을 추가합니다.
     arch_version = '2.1.0'
     lifecycle_version = '2.2.0'
+
+    archComponentVersion = '2.2.5'
 }
