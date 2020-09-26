@@ -86,11 +86,11 @@ dependencies {
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
     // 룸 라이브러리를 추가합니다.
-    implementation "android.arch.persistence.room:runtime:$archComponentVersion"
+    implementation "androidx.room:room-runtime:$room_version"
 
     // 룸 라이브러리 RxJava 플러그인을 추가합니다.
-    implementation "android.arch.persistence.room:rxjava2:$archComponentVersion"
+    implementation "androidx.room:room-rxjava2:$room_version"
 
     // 룸 라이브러리용 어노테이션 프로세서를 추가합니다.
-    kapt "android.arch.persistence.room:compiler:$archComponentVersion"
+    kapt "androidx.room:room-compiler:$room_version"
 }

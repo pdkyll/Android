@@ -1,5 +1,6 @@
 package com.androidhuman.example.simplegithub.data
 
+import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -9,6 +10,7 @@ import io.reactivex.Flowable
 /*
  * Created by Thkim on 2020/09/25
  */
+@Dao
 interface SearchHistoryDao {
 
     // 데이터베이스에 저장소를 추가합니다.

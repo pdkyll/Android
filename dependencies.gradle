@@ -25,5 +25,5 @@ ext {
     arch_version = '2.1.0'
     lifecycle_version = '2.2.0'
 
-    archComponentVersion = '2.2.5'
+    room_version = '2.2.5'
 }

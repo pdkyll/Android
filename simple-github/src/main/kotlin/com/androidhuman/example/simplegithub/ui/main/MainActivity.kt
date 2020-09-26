@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.androidhuman.example.simplegithub.R
 import com.androidhuman.example.simplegithub.api.model.GithubRepo
 import com.androidhuman.example.simplegithub.data.provideSearchHistoryDao
@@ -53,6 +54,11 @@ class MainActivity : AppCompatActivity(), SearchAdapter.ItemClickListener {
         btnActivityMainSearch.setOnClickListener { // 저장소 검색 액티비티를 호출합니다.
             // 호출할 액티비티만 명시합니다.
             startActivity<SearchActivity>()
+        }
+
+        with(rvActivityMainList) {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = this@MainActivity.adapter
         }
     }
 
