@@ -27,5 +27,5 @@ class GithubRepo(
         // updatedAt 프로퍼티의 테이블 내 필드 이름을 updated_at 으로 지정합니다.
         @ColumnInfo(name = "updated_at") val updatedAt: String,
 
-        @SerializedName("stargazer_count") val stars: Int
+        @SerializedName("stargazers_count") val stars: Int
 )

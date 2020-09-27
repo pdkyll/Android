@@ -92,11 +92,9 @@ class RepositoryActivity : AppCompatActivity() {
                     } else {
                         tvActivityRepositoryLanguage.text = repository.language
                     }
-                    try {
-                        // 응답에 포함된 마지막 업데이트 시각을 Date 형식으로 변환합니다.
-                        val lastUpdate = dateFormatInResponse.parse(repository.updatedAt)
 
-                        // 마지막 업데이트 시각을 yyyy-MM-dd HH:mm:ss 형태로 표시합니다.
+                    try {
+                        val lastUpdate = dateFormatInResponse.parse(repository.updatedAt)
                         tvActivityRepositoryLastUpdate.text = dateFormatToShow.format(lastUpdate)
                     } catch (e: ParseException) {
                         tvActivityRepositoryLastUpdate.text = getString(R.string.unknown)
