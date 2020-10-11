@@ -1,7 +1,8 @@
-package com.thkim.market
+package com.thkim.market.ui.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.thkim.market.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,0 +1,52 @@
+package com.thkim.market.ui.signin
+
+import android.util.Log
+import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.thkim.market.api.SignInApi
+import com.thkim.market.util.SupportOptional
+import com.thkim.market.util.optionalOf
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.BehaviorSubject
+import io.reactivex.rxjava3.subjects.PublishSubject
+
+/*
+ * Created by Thkim on 2020/10/10
+ */
+class SignInViewModel(
+    private val signInApi: SignInApi
+) : ViewModel() {
+
+    companion object {
+        private const val TAG_Thkim = "Thkim_SignInViewModel"
+    }
+
+    // Firebase 에서 가져온 유저값을 전달할 서브젝트.
+    val currentUser: BehaviorSubject<SupportOptional<FirebaseUser>> = BehaviorSubject.create()
+
+    // 에러 메시지를 전달할 서브젝트.
+    val message: PublishSubject<String> = PublishSubject.create()
+
+    // 작업 진행 상태를 전달할 서브젝트입니다. 초깃값으로 false 를 지정합니다.
+    val isLoading: BehaviorSubject<Boolean> = BehaviorSubject.createDefault(false)
+
+    fun requestSignInAccount(idToken: String, auth: FirebaseAuth): Disposable =
+        signInApi.getAuthCredential(idToken)
+            .subscribeOn(Schedulers.io())
+            .doOnSubscribe { isLoading.onNext(true) }
+            .doOnTerminate { isLoading.onNext(false) }
+            .subscribe({ credential ->
+                auth.signInWithCredential(credential)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Log.d(TAG_Thkim, "task is successful.")
+                            currentUser.onNext(optionalOf(auth.currentUser))
+                        }
+                    }
+            }) {
+                message.onNext(it.message ?: "Unexpected error.")
+            }
+
+}
