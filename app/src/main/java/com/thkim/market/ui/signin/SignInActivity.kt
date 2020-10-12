@@ -1,6 +1,9 @@
 package com.thkim.market.ui.signin
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -34,13 +37,13 @@ class SignInActivity : DaggerAppCompatActivity() {
         const val RC_SIGN_IN = 101
     }
 
-    internal val auth = Singleton.getInstance()
+    private val auth = Singleton.getInstance()
 
     private lateinit var mGoogleSignInClient: GoogleSignInClient
 
-    internal val disposable = AutoClearedDisposable(this)
+    private val disposable = AutoClearedDisposable(this)
 
-    internal val viewDisposable = AutoClearedDisposable(this, false)
+    private val viewDisposable = AutoClearedDisposable(this, false)
 
     @Inject
     lateinit var viewModelFactory: SignInViewModelFactory
@@ -48,8 +51,9 @@ class SignInActivity : DaggerAppCompatActivity() {
     @Inject
     lateinit var signInApi: SignInApi
 
-    lateinit var viewModel: SignInViewModel
+    private lateinit var viewModel: SignInViewModel
 
+    private var isConnected: Boolean = false
 
     object Singleton {
         fun getInstance() = FirebaseAuth.getInstance()
@@ -67,17 +71,37 @@ class SignInActivity : DaggerAppCompatActivity() {
         lifecycle.addObserver(viewDisposable)
 
         sign_in_button.setOnClickListener {
-            // Configure Google Sign In
-            val signInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
+            // Check network connection
+            if (isConnected) {
+                Log.d(
+                    TAG_Thkim, "Network is connected -> " +
+                            "isConnected : $isConnected"
+                )
+                // Internet Connected
 
-            // Build a GoogleSignInClient with the options specified by gso.
-            mGoogleSignInClient = GoogleSignIn.getClient(this, signInOptions)
+                // Configure Google Sign In
+                val signInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.default_web_client_id))
+                    .requestEmail()
+                    .build()
 
-            val signInIntent = mGoogleSignInClient.signInIntent
-            startActivityForResult(signInIntent, RC_SIGN_IN)
+                // Build a GoogleSignInClient with the options specified by gso.
+                mGoogleSignInClient = GoogleSignIn.getClient(this, signInOptions)
+
+                val signInIntent = mGoogleSignInClient.signInIntent
+                startActivityForResult(signInIntent, RC_SIGN_IN)
+            } else {
+                Log.d(
+                    TAG_Thkim, "Network is connected -> " +
+                            "isConnected : $isConnected"
+                )
+                // Not Connected
+                Snackbar.make(
+                    sign_in_layout as View,
+                    "Please check network state.",
+                    Snackbar.LENGTH_LONG
+                ).show()
+            }
         }
 
         viewDisposable.add(viewModel.currentUser
@@ -102,6 +126,13 @@ class SignInActivity : DaggerAppCompatActivity() {
                     hideProgress()
                 }
             })
+
+        disposable.add(viewModel.isConnected
+            .subscribe {
+                isConnected = it
+            })
+
+        checkNetState()
     }
 
     override fun onStart() {
@@ -144,7 +175,18 @@ class SignInActivity : DaggerAppCompatActivity() {
         // 아래에서 에러가 발생할 경우 개발 PC의 SHA-1 지문을 Firebase 콘솔에 추가해야한다.
         val account = task.getResult(ApiException::class.java)!!
         disposable.add(viewModel.requestSignInAccount(account.idToken!!, auth))
+    }
 
+    @Suppress("DEPRECATION")
+    private fun checkNetState() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            disposable.add(viewModel.getNetworkState(applicationContext))
+        } else {
+            Log.d(TAG_Thkim, "LOW SDK VERSION : ${Build.VERSION.SDK_INT}")
+            val cm = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val activeNetwork: android.net.NetworkInfo? = cm.activeNetworkInfo
+            isConnected = activeNetwork?.isConnectedOrConnecting == true
+        }
     }
 
     private fun showProgress() {
