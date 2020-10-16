@@ -2,7 +2,6 @@ package com.thkim.market.ui.signin
 
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -10,6 +9,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.thkim.market.api.SignInApi
 import com.thkim.market.util.SupportOptional
 import com.thkim.market.util.optionalOf
+import com.thkim.util.Logger
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.functions.Consumer
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -22,10 +22,6 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 class SignInViewModel(
     private val signInApi: SignInApi
 ) : ViewModel() {
-
-    companion object {
-        private const val TAG_Thkim = "Thkim_SignInViewModel"
-    }
 
     // Firebase 에서 가져온 유저값을 전달할 서브젝트.
     val currentUser: BehaviorSubject<SupportOptional<FirebaseUser>> = BehaviorSubject.create()
@@ -41,13 +37,21 @@ class SignInViewModel(
     fun requestSignInAccount(idToken: String, auth: FirebaseAuth): Disposable =
         signInApi.getAuthCredential(idToken)
             .subscribeOn(Schedulers.io())
-            .doOnSubscribe { isLoading.onNext(true) }
-            .doOnTerminate { isLoading.onNext(false) }
+            .doOnSubscribe {
+                Logger.start()
+                isLoading.onNext(true)
+                Logger.end()
+            }
+            .doOnTerminate {
+                Logger.start()
+                isLoading.onNext(false)
+                Logger.end()
+            }
             .subscribe({ credential ->
                 auth.signInWithCredential(credential)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            Log.d(TAG_Thkim, "task is successful.")
+                            Logger.d("task is successful.")
                             currentUser.onNext(optionalOf(auth.currentUser))
                         }
                     }
@@ -60,6 +64,8 @@ class SignInViewModel(
         signInApi.getNetworkState(context)
             .subscribeOn(Schedulers.computation())
             .subscribe(Consumer {
+                Logger.start()
                 isConnected.onNext(it)
+                Logger.end()
             })
 }
