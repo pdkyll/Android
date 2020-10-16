@@ -19,7 +19,7 @@ import com.thkim.market.R
 import com.thkim.market.api.SignInApi
 import com.thkim.market.rx.AutoClearedDisposable
 import com.thkim.market.ui.main.MainActivity
-import com.thkim.util.Logger
+import com.thkim.util.DLog
 import dagger.android.support.DaggerAppCompatActivity
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_sign_in.*
@@ -61,7 +61,7 @@ class SignInActivity : DaggerAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Logger.start()
+        DLog.start()
         setContentView(R.layout.activity_sign_in)
 
         viewModel = ViewModelProvider(this, viewModelFactory)[SignInViewModel::class.java]
@@ -73,7 +73,7 @@ class SignInActivity : DaggerAppCompatActivity() {
         sign_in_button.setOnClickListener {
             // Check network connection
             if (isConnected) {
-                Logger.d("Network is connected -> isConnected : $isConnected")
+                DLog.d("Network is connected -> isConnected : $isConnected")
                 // Internet Connected
 
                 // Configure Google Sign In
@@ -88,7 +88,7 @@ class SignInActivity : DaggerAppCompatActivity() {
                 val signInIntent = mGoogleSignInClient.signInIntent
                 startActivityForResult(signInIntent, RC_SIGN_IN)
             } else {
-                Logger.d("Network is connected -> isConnected : $isConnected")
+                DLog.d("Network is connected -> isConnected : $isConnected")
                 // Not Connected
                 Snackbar.make(
                     sign_in_layout as View,
@@ -127,34 +127,34 @@ class SignInActivity : DaggerAppCompatActivity() {
             })
 
         checkNetState()
-        Logger.end()
+        DLog.end()
     }
 
     override fun onStart() {
         super.onStart()
-        Logger.start()
+        DLog.start()
 
         // Check if user is signed in (non-null) and update UI accordingly.
         if (auth.currentUser != null) {
             launchMainActivity()
         }
-        Logger.end()
+        DLog.end()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Logger.start()
+        DLog.start()
 
         showProgress()
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-            Logger.d("RC_SIGN_IN")
+            DLog.d("RC_SIGN_IN")
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 getSignInAccount(task)
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
-                Logger.w("Google sign in failed -> $e")
+                DLog.w("Google sign in failed -> $e")
                 Snackbar.make(
                     sign_in_layout as View,
                     "Google sign in failed.",
@@ -163,30 +163,30 @@ class SignInActivity : DaggerAppCompatActivity() {
                 hideProgress()
             }
         }
-        Logger.end()
+        DLog.end()
     }
 
     private fun getSignInAccount(task: Task<GoogleSignInAccount>) {
-        Logger.start()
+        DLog.start()
         // Google Sign In was successful, authenticate with Firebase
         // 아래에서 에러가 발생할 경우 개발 PC의 SHA-1 지문을 Firebase 콘솔에 추가해야한다.
         val account = task.getResult(ApiException::class.java)!!
         disposable.add(viewModel.requestSignInAccount(account.idToken!!, auth))
-        Logger.end()
+        DLog.end()
     }
 
     @Suppress("DEPRECATION")
     private fun checkNetState() {
-        Logger.start()
+        DLog.start()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             disposable.add(viewModel.getNetworkState(applicationContext))
         } else {
-            Logger.d("LOW SDK VERSION : ${Build.VERSION.SDK_INT}")
+            DLog.d("LOW SDK VERSION : ${Build.VERSION.SDK_INT}")
             val cm = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val activeNetwork: android.net.NetworkInfo? = cm.activeNetworkInfo
             isConnected = activeNetwork?.isConnectedOrConnecting == true
         }
-        Logger.end()
+        DLog.end()
     }
 
     private fun showProgress() {

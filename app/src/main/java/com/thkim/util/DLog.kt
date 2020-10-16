@@ -6,7 +6,7 @@ import com.thkim.market.BuildConfig.DEBUG_MODE
 /*
  * Created by kth on 2020-10-16.
  */
-class Logger {
+class DLog {
     companion object {
         const val TAG = "Thkim"
 

@@ -9,7 +9,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.thkim.market.api.SignInApi
 import com.thkim.market.util.SupportOptional
 import com.thkim.market.util.optionalOf
-import com.thkim.util.Logger
+import com.thkim.util.DLog
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.functions.Consumer
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -38,20 +38,20 @@ class SignInViewModel(
         signInApi.getAuthCredential(idToken)
             .subscribeOn(Schedulers.io())
             .doOnSubscribe {
-                Logger.start()
+                DLog.start()
                 isLoading.onNext(true)
-                Logger.end()
+                DLog.end()
             }
             .doOnTerminate {
-                Logger.start()
+                DLog.start()
                 isLoading.onNext(false)
-                Logger.end()
+                DLog.end()
             }
             .subscribe({ credential ->
                 auth.signInWithCredential(credential)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            Logger.d("task is successful.")
+                            DLog.d("task is successful.")
                             currentUser.onNext(optionalOf(auth.currentUser))
                         }
                     }
@@ -64,8 +64,8 @@ class SignInViewModel(
         signInApi.getNetworkState(context)
             .subscribeOn(Schedulers.computation())
             .subscribe(Consumer {
-                Logger.start()
+                DLog.start()
                 isConnected.onNext(it)
-                Logger.end()
+                DLog.end()
             })
 }

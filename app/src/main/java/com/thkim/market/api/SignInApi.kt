@@ -7,7 +7,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
-import com.thkim.util.Logger
+import com.thkim.util.DLog
 import io.reactivex.rxjava3.core.Single
 
 /*
@@ -32,12 +32,12 @@ class SignInApi {
 //                val builder = NetworkRequest.Builder()
                 connectivityManager.registerDefaultNetworkCallback(object : ConnectivityManager.NetworkCallback() {
                     override fun onAvailable(network: Network) {
-                        Logger.d("onAvailable() -> internet")
+                        DLog.d("onAvailable() -> internet")
                         it.onSuccess(true)
                     }
 
                     override fun onLost(network: Network) {
-                        Logger.d("onLost() -> internet")
+                        DLog.d("onLost() -> internet")
                         it.onSuccess(false)
                     }
                 }
