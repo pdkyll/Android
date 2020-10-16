@@ -19,7 +19,7 @@ import com.thkim.market.R
 import com.thkim.market.api.SignInApi
 import com.thkim.market.rx.AutoClearedDisposable
 import com.thkim.market.ui.main.MainActivity
-import com.thkim.util.DLog
+import com.thkim.market.util.DLog
 import dagger.android.support.DaggerAppCompatActivity
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_sign_in.*

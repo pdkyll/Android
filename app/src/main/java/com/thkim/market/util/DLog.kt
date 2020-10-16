@@ -1,4 +1,4 @@
-package com.thkim.util
+package com.thkim.market.util
 
 import android.util.Log
 import com.thkim.market.BuildConfig.DEBUG_MODE

@@ -7,7 +7,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
-import com.thkim.util.DLog
+import com.thkim.market.util.DLog
 import io.reactivex.rxjava3.core.Single
 
 /*
