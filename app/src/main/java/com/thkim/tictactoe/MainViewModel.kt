@@ -15,34 +15,39 @@ class MainViewModel : ViewModel() {
     private var player = mutableListOf<Int>()
     private var computer = mutableListOf<Int>()
 
-    private val _playerData = MutableLiveData<String>()
-    val playerData: LiveData<String>
+    private val scoreArray by lazy { createMatrix(3, 3) }
+    private val hashTable = HashMap<Int, TableState>()
+
+    private val _playerData = MutableLiveData<TableState>()
+    val playerData: LiveData<TableState>
         get() = _playerData
 
     init {
-        for (i in 0..9) {
-            score[i] = "none"
+        for (i in 0..2) {
+            for (j in 0..2) {
+                val num = scoreArray[i][j]
+                hashTable[num] = TableState.NONE
+            }
         }
     }
 
 
     fun checkTicTacToe(data: Int) {
 
-        when (score[data]) {
-            "none" -> {
-                score[data] = "player"
-                _playerData.postValue("player")
+        when (hashTable[data]) {
+            TableState.NONE -> {
+                hashTable[data] = TableState.PLAYER
+                _playerData.postValue(TableState.PLAYER)
             }
-            "player" -> {
+            TableState.PLAYER -> {
 
             }
-            "computer" -> {
+            TableState.COMPUTER -> {
 
             }
         }
 
         setComputerData()
-
     }
 
     private fun setComputerData() {
@@ -57,7 +62,21 @@ class MainViewModel : ViewModel() {
             }
         }
 
-        _playerData.postValue("computer")
+        _playerData.postValue(TableState.COMPUTER)
+    }
+
+    private fun createMatrix(row: Int, col: Int): Array<Array<Int>> {
+
+        var temp = -col
+
+        return Array(row) {
+            Array(col) { i: Int ->
+                if (i == 0) {
+                    temp += col
+                }
+                i + temp
+            }
+        }
     }
 }
 

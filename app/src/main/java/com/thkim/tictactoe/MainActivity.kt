@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.thkim.tictactoe.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -11,15 +12,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
-    private val mainViewModel: MainViewModel by viewModels {
-        MainViewModelFactory()
-    }
+    private val mainViewModel: MainViewModel by viewModels { MainViewModelFactory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        mainViewModel.playerData.observe(this, {
+            when(it) {
+                TableState.NONE -> {
 
+                }
+                TableState.PLAYER -> {
+
+                }
+                TableState.COMPUTER -> {
+
+                }
+                else -> {
+
+                }
+            }
+        })
     }
 
     override fun onClick(v: View) {
