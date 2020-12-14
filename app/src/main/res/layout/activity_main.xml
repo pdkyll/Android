@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="TicTacToe"
+        android:textSize="32sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="3"
+        android:orientation="horizontal"
+        android:rowCount="3">
+
+        <ImageView
+            android:id="@+id/iv_table_item_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:background="@drawable/table_background"
+            android:onClick="onClick"
+            android:src="@drawable/ic_outline_brightness_1_24" />
+
+        <ImageView
+            android:id="@+id/iv_table_item_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:background="@drawable/table_background"
+            android:onClick="onClick"
+            android:src="@drawable/ic_outline_brightness_1_24" />
+
+        <ImageView
+            android:id="@+id/iv_table_item_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:background="@drawable/table_background"
+            android:onClick="onClick"
+            android:src="@drawable/ic_outline_brightness_1_24" />
+
+        <ImageView
+            android:id="@+id/iv_table_item_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:background="@drawable/table_background"
+            android:onClick="onClick"
+            android:src="@drawable/ic_outline_brightness_1_24" />
+
+        <ImageView
+            android:id="@+id/iv_table_item_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:background="@drawable/table_background"
+            android:onClick="onClick"
+            android:src="@drawable/ic_outline_brightness_1_24" />
+
+        <ImageView
+            android:id="@+id/iv_table_item_6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:background="@drawable/table_background"
+            android:onClick="onClick"
+            android:src="@drawable/ic_outline_brightness_1_24" />
+
+        <ImageView
+            android:id="@+id/iv_table_item_7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:background="@drawable/table_background"
+            android:onClick="onClick"
+            android:src="@drawable/ic_outline_brightness_1_24" />
+
+        <ImageView
+            android:id="@+id/iv_table_item_8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:background="@drawable/table_background"
+            android:onClick="onClick"
+            android:src="@drawable/ic_outline_brightness_1_24" />
+
+        <ImageView
+            android:id="@+id/iv_table_item_9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:background="@drawable/table_background"
+            android:onClick="onClick"
+            android:src="@drawable/ic_outline_brightness_1_24" />
+
+    </GridLayout>
+
+
+    <!--        <TableLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:background="@drawable/table_background"-->
+    <!--            android:stretchColumns="0, 1, 2"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--            app:layout_constraintDimensionRatio="1:1"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent">-->
+
+    <!--            <TableRow-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="0dp">-->
+
+    <!--                <ImageView-->
+    <!--                    android:id="@+id/iv_table_item_1"-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:adjustViewBounds="true"-->
+    <!--                    android:scaleType="centerCrop"-->
+    <!--                    android:layout_height="match_parent"-->
+    <!--                    android:background="@drawable/table_background"-->
+    <!--                    android:padding="8dp" />-->
+
+    <!--                <ImageView-->
+    <!--                    android:id="@+id/iv_table_item_2"-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:scaleType="centerCrop"-->
+    <!--                    android:adjustViewBounds="true"-->
+    <!--                    android:background="@drawable/table_background"-->
+    <!--                    android:padding="8dp" />-->
+
+    <!--                <ImageView-->
+    <!--                    android:id="@+id/iv_table_item_3"-->
+    <!--                    android:adjustViewBounds="true"-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:scaleType="centerCrop"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:background="@drawable/table_background"-->
+    <!--                    android:padding="8dp" />-->
+    <!--            </TableRow>-->
+
+    <!--            <TableRow-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="match_parent">-->
+
+    <!--                <ImageView-->
+    <!--                    android:id="@+id/iv_table_item_4"-->
+    <!--                    android:adjustViewBounds="true"-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:scaleType="centerCrop"-->
+    <!--                    android:background="@drawable/table_background"-->
+    <!--                    android:padding="8dp"-->
+    <!--                    tools:src="@drawable/ic_baseline_brightness_1_24" />-->
+
+    <!--                <ImageView-->
+    <!--                    android:id="@+id/iv_table_item_5"-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:adjustViewBounds="true"-->
+    <!--                    android:scaleType="centerCrop"-->
+    <!--                    android:background="@drawable/table_background"-->
+    <!--                    android:padding="8dp"-->
+    <!--                    tools:src="@drawable/ic_baseline_clear_24" />-->
+
+    <!--                <ImageView-->
+    <!--                    android:id="@+id/iv_table_item_6"-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:scaleType="centerCrop"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:adjustViewBounds="true"-->
+    <!--                    android:background="@drawable/table_background"-->
+    <!--                    android:padding="8dp"-->
+    <!--                    tools:src="@drawable/ic_baseline_brightness_1_24" />-->
+    <!--            </TableRow>-->
+
+    <!--            <TableRow-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="match_parent">-->
+
+    <!--                <ImageView-->
+    <!--                    android:id="@+id/iv_table_item_7"-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:scaleType="centerCrop"-->
+    <!--                    android:adjustViewBounds="true"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:background="@drawable/table_background"-->
+    <!--                    android:padding="8dp"-->
+    <!--                    tools:src="@drawable/ic_baseline_brightness_1_24" />-->
+
+    <!--                <ImageView-->
+    <!--                    android:id="@+id/iv_table_item_8"-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:scaleType="centerCrop"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:adjustViewBounds="true"-->
+    <!--                    android:background="@drawable/table_background"-->
+    <!--                    android:padding="8dp"-->
+    <!--                    tools:src="@drawable/ic_baseline_clear_24" />-->
+
+    <!--                <ImageView-->
+    <!--                    android:id="@+id/iv_table_item_9"-->
+    <!--                    android:scaleType="centerCrop"-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:adjustViewBounds="true"-->
+    <!--                    android:background="@drawable/table_background"-->
+    <!--                    android:padding="8dp"-->
+    <!--                    tools:src="@drawable/ic_baseline_brightness_1_24" />-->
+    <!--            </TableRow>-->
+
+    <!--        </TableLayout>-->
+
+
+</LinearLayout>
