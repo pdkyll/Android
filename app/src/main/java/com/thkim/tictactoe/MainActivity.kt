@@ -1,6 +1,8 @@
 package com.thkim.tictactoe
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -23,14 +25,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(binding.root)
 
         mainViewModel.playerData.observe(this, {
+            LogT.start()
             when (it[STATE]) {
                 TableState.NONE -> {
 
                 }
                 TableState.PLAYER -> {
-                    LogT.d("test")
+                    LogT.d("PLAYER")
                     setPlayerImage(it[DATA] as Int, R.drawable.ic_player_chess)
-                    mainViewModel.setComputerData()
                 }
                 TableState.COMPUTER -> {
 
@@ -45,12 +47,35 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         mainViewModel.computerData.observe(this, {
             when (it[STATE]) {
                 TableState.COMPUTER -> {
-                    setPlayerImage(it[DATA] as Int, R.drawable.ic_computer_chess)
+                    Handler(Looper.getMainLooper()).apply {
+                        postDelayed({
+                            setPlayerImage(it[DATA] as Int, R.drawable.ic_computer_chess)
+                        }, 600)
+                    }
+                }
+            }
+        })
+
+        mainViewModel.alertsDone.observe(this, {
+            LogT.start()
+            when (it) {
+                TableState.PLAYER -> {
+                    LogT.d("PLAYER is Winner.")
+                    Snackbar.make(binding.layoutParent, "YOU ARE WINNER.", Snackbar.LENGTH_SHORT)
+                        .show()
+                }
+                TableState.COMPUTER -> {
+                    LogT.d("COMPUTER is Winner.")
+                    Snackbar.make(binding.layoutParent, "YOU LOSE.", Snackbar.LENGTH_SHORT)
+                        .show()
                 }
                 TableState.DONE -> {
-                    setPlayerImage(it[DATA] as Int, R.drawable.ic_computer_chess)
-                    Snackbar.make(binding.layoutParent, "Game is done.", Snackbar.LENGTH_SHORT)
+                    LogT.d("Game is Done.")
+                    Snackbar.make(binding.layoutParent, "Draw Game.", Snackbar.LENGTH_SHORT)
                         .show()
+                }
+                else -> {
+                    mainViewModel.setComputerData()
                 }
             }
         })

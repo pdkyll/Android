@@ -11,7 +11,12 @@ import kotlin.random.Random
  */
 class MainViewModel : ViewModel() {
 
-    private val scoreArray by lazy { createMatrix(3, 3) }
+    companion object {
+        const val ROW = 3
+        const val COL = 3
+    }
+
+    private val scoreArray by lazy { createMatrix(ROW, COL) }
     private val scoreState = HashMap<Int, TableState>()
     private val remainedArea = arrayListOf<Int>()
 
@@ -23,9 +28,13 @@ class MainViewModel : ViewModel() {
     val computerData: LiveData<Array<Any>>
         get() = _computerData
 
+    private val _alertsDone = MutableLiveData<TableState>()
+    val alertsDone: LiveData<TableState>
+        get() = _alertsDone
+
     init {
-        for (i in 0..2) {
-            for (j in 0..2) {
+        for (i in 0 until ROW) {
+            for (j in 0 until COL) {
                 val num = scoreArray[i][j]
                 scoreState[num] = TableState.NONE
                 remainedArea.add(num)
@@ -36,11 +45,17 @@ class MainViewModel : ViewModel() {
 
     fun checkTicTacToe(data: Int) {
         LogT.d("player data : $data")
+        LogT.d("scoreState[data] : ${scoreState[data]}")
 
         when (scoreState[data]) {
             TableState.NONE -> {
                 scoreState[data] = TableState.PLAYER
+
                 _playerData.value = arrayOf(data, TableState.PLAYER)
+
+                if (checkLine(TableState.PLAYER)) _alertsDone.value = TableState.PLAYER
+                else _alertsDone.value = TableState.NONE
+
                 removeData(data)
                 for (i in 0 until remainedArea.size) LogT.d("remainedArea $i : ${remainedArea[i]}")
             }
@@ -58,19 +73,25 @@ class MainViewModel : ViewModel() {
     }
 
     fun setComputerData() {
+        LogT.start()
         var randomNum: Int
 
         while (true) {
             if (remainedArea.size <= 1) {
-                _computerData.value = arrayOf(remainedArea.last(), TableState.DONE)
+                _alertsDone.value = TableState.DONE
                 break
             }
             randomNum = Random.nextInt(remainedArea.size)
             LogT.d("randomNum : $randomNum")
             LogT.d("remainedArea[randomNum] : ${remainedArea[randomNum]}")
             if (scoreState[remainedArea[randomNum]] == TableState.NONE) {
+
                 scoreState[remainedArea[randomNum]] = TableState.COMPUTER
+
                 _computerData.value = arrayOf(remainedArea[randomNum], TableState.COMPUTER)
+
+                if (checkLine(TableState.COMPUTER)) _alertsDone.value = TableState.COMPUTER
+
                 removeData(remainedArea[randomNum])
                 break
             } else {
@@ -78,6 +99,73 @@ class MainViewModel : ViewModel() {
             }
         }
 
+    }
+
+    private fun checkLine(checker: TableState): Boolean {
+        return checkCrossLtoR(checker) ||
+                checkCrossRtoL(checker) ||
+                checkColLine(checker) ||
+                checkRowLine(checker)
+    }
+
+    private fun checkCrossLtoR(checker: TableState): Boolean {
+
+        for (i in 0 until COL) {
+            LogT.d("L To R $i : ${scoreState[scoreArray[i][i]]}")
+            if (scoreState[scoreArray[i][i]] == checker) {
+                continue
+            } else {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    private fun checkCrossRtoL(checker: TableState): Boolean {
+        for (i in 0 until COL) {
+            LogT.d("R TO L${scoreState[scoreArray[i][(COL - 1) - i]]}")
+            if (scoreState[scoreArray[i][(COL - 1) - i]] == checker) {
+                continue
+            } else {
+                return false
+            }
+        }
+        return true
+    }
+
+    private fun checkColLine(checker: TableState): Boolean {
+        var temp = 0
+        for (row in 0 until ROW) {
+            for (col in 0 until COL) {
+                LogT.d("[$row, $col] : ${scoreState[scoreArray[row][col]]}")
+                if (scoreState[scoreArray[row][col]] == checker) {
+                    ++temp
+                    if (temp == COL) return true
+                    continue
+                }
+            }
+            temp = 0
+        }
+
+        return false
+    }
+
+    private fun checkRowLine(checker: TableState): Boolean {
+        var temp = 0
+        for (row in 0 until ROW) {
+            for (col in 0 until COL) {
+                LogT.d("[$col, $row] : ${scoreState[scoreArray[col][row]]}")
+                if (scoreState[scoreArray[col][row]] == checker) {
+                    ++temp
+                    if (temp == COL) return true
+                    continue
+                }
+            }
+            temp = 0
+        }
+
+        return false
     }
 
     private fun removeData(data: Int) {
