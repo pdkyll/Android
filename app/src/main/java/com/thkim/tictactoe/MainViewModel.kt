@@ -11,58 +11,77 @@ import kotlin.random.Random
  */
 class MainViewModel : ViewModel() {
 
-    private var score = mutableMapOf<Int, String>()
-    private var player = mutableListOf<Int>()
-    private var computer = mutableListOf<Int>()
-
     private val scoreArray by lazy { createMatrix(3, 3) }
-    private val hashTable = HashMap<Int, TableState>()
+    private val scoreState = HashMap<Int, TableState>()
+    private val remainedArea = arrayListOf<Int>()
 
-    private val _playerData = MutableLiveData<TableState>()
-    val playerData: LiveData<TableState>
+    private val _playerData = MutableLiveData<Array<Any>>()
+    val playerData: LiveData<Array<Any>>
         get() = _playerData
+
+    private val _computerData = MutableLiveData<Array<Any>>()
+    val computerData: LiveData<Array<Any>>
+        get() = _computerData
 
     init {
         for (i in 0..2) {
             for (j in 0..2) {
                 val num = scoreArray[i][j]
-                hashTable[num] = TableState.NONE
+                scoreState[num] = TableState.NONE
+                remainedArea.add(num)
             }
         }
     }
 
 
     fun checkTicTacToe(data: Int) {
+        LogT.d("player data : $data")
 
-        when (hashTable[data]) {
+        when (scoreState[data]) {
             TableState.NONE -> {
-                hashTable[data] = TableState.PLAYER
-                _playerData.postValue(TableState.PLAYER)
+                scoreState[data] = TableState.PLAYER
+                _playerData.value = arrayOf(data, TableState.PLAYER)
+                removeData(data)
+                for (i in 0 until remainedArea.size) LogT.d("remainedArea $i : ${remainedArea[i]}")
             }
             TableState.PLAYER -> {
-
+                _playerData.value = arrayOf(data, TableState.ALREADY)
             }
             TableState.COMPUTER -> {
+                _playerData.value = arrayOf(data, TableState.ALREADY)
+            }
+            else -> {
 
             }
         }
 
-        setComputerData()
     }
 
-    private fun setComputerData() {
+    fun setComputerData() {
+        var randomNum: Int
 
         while (true) {
-            val randomNum = Random.nextInt(0, 9)
-            if (score[randomNum] == "none") {
-                score[randomNum] = "computer"
+            if (remainedArea.size <= 1) {
+                _computerData.value = arrayOf(remainedArea.last(), TableState.DONE)
+                break
+            }
+            randomNum = Random.nextInt(remainedArea.size)
+            LogT.d("randomNum : $randomNum")
+            LogT.d("remainedArea[randomNum] : ${remainedArea[randomNum]}")
+            if (scoreState[remainedArea[randomNum]] == TableState.NONE) {
+                scoreState[remainedArea[randomNum]] = TableState.COMPUTER
+                _computerData.value = arrayOf(remainedArea[randomNum], TableState.COMPUTER)
+                removeData(remainedArea[randomNum])
                 break
             } else {
                 continue
             }
         }
 
-        _playerData.postValue(TableState.COMPUTER)
+    }
+
+    private fun removeData(data: Int) {
+        remainedArea.remove(data)
     }
 
     private fun createMatrix(row: Int, col: Int): Array<Array<Int>> {

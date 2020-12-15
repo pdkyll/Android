@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -26,6 +27,16 @@
         android:columnCount="3"
         android:orientation="horizontal"
         android:rowCount="3">
+
+        <ImageView
+            android:id="@+id/iv_table_item_0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:background="@drawable/table_background"
+            android:onClick="onClick"
+            android:src="@drawable/ic_outline_brightness_1_24" />
 
         <ImageView
             android:id="@+id/iv_table_item_1"
@@ -99,16 +110,6 @@
 
         <ImageView
             android:id="@+id/iv_table_item_8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:background="@drawable/table_background"
-            android:onClick="onClick"
-            android:src="@drawable/ic_outline_brightness_1_24" />
-
-        <ImageView
-            android:id="@+id/iv_table_item_9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_rowWeight="1"
