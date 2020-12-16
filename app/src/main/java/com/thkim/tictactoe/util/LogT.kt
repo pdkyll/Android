@@ -1,4 +1,4 @@
-package com.thkim.tictactoe
+package com.thkim.tictactoe.util
 
 import android.util.Log
 import com.thkim.tictactoe.BuildConfig.DEBUG_MODE

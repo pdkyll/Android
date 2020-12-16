@@ -1,9 +1,12 @@
-package com.thkim.tictactoe
+package com.thkim.tictactoe.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.thkim.tictactoe.R
+import com.thkim.tictactoe.TableState
+import com.thkim.tictactoe.util.LogT
 import kotlin.random.Random
 
 /*
@@ -32,14 +35,13 @@ class MainViewModel : ViewModel() {
     val alertsDone: LiveData<TableState>
         get() = _alertsDone
 
+    private val _resetAllImage = MutableLiveData<Int>()
+    val resetAllImage: MutableLiveData<Int>
+        get() = _resetAllImage
+
+
     init {
-        for (i in 0 until ROW) {
-            for (j in 0 until COL) {
-                val num = scoreArray[i][j]
-                scoreState[num] = TableState.NONE
-                remainedArea.add(num)
-            }
-        }
+        initData()
     }
 
 
@@ -99,6 +101,22 @@ class MainViewModel : ViewModel() {
             }
         }
 
+    }
+
+    fun resetAllData() {
+        remainedArea.removeAll(remainedArea)
+        initData()
+        _resetAllImage.value = R.drawable.ic_initial_image
+    }
+
+    private fun initData() {
+        for (i in 0 until ROW) {
+            for (j in 0 until COL) {
+                val num = scoreArray[i][j]
+                scoreState[num] = TableState.NONE
+                remainedArea.add(num)
+            }
+        }
     }
 
     private fun checkLine(checker: TableState): Boolean {

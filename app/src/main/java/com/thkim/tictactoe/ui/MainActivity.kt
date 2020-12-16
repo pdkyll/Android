@@ -1,4 +1,4 @@
-package com.thkim.tictactoe
+package com.thkim.tictactoe.ui
 
 import android.os.Bundle
 import android.os.Handler
@@ -6,8 +6,11 @@ import android.os.Looper
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import com.google.android.material.snackbar.Snackbar
+import com.thkim.tictactoe.*
 import com.thkim.tictactoe.databinding.ActivityMainBinding
+import com.thkim.tictactoe.util.LogT
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -20,9 +23,31 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private val mainViewModel: MainViewModel by viewModels { MainViewModelFactory() }
 
+    private val _myScore = MutableLiveData<Int>()
+    val myScore: MutableLiveData<Int>
+        get() = _myScore
+
+    private val _comScore = MutableLiveData<Int>()
+    val comScore: MutableLiveData<Int>
+        get() = _comScore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        binding.apply {
+            lifecycleOwner = this@MainActivity
+            this.mainViewModel = this@MainActivity.mainViewModel
+            this.mainActivity = this@MainActivity
+        }
+
+        with(TicTacToeApplication.pref) {
+            if (isInitPlayer()) setInitPlayer()
+
+            _myScore.value = this.getMyScore()
+            _comScore.value = this.getComScore()
+        }
+
 
         mainViewModel.playerData.observe(this, {
             LogT.start()
@@ -61,11 +86,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             when (it) {
                 TableState.PLAYER -> {
                     LogT.d("PLAYER is Winner.")
+                    TicTacToeApplication.pref.setMyScore(TicTacToeApplication.pref.getMyScore() + 1)
+
+                    _myScore.value = TicTacToeApplication.pref.getMyScore()
+
                     Snackbar.make(binding.layoutParent, "YOU ARE WINNER.", Snackbar.LENGTH_SHORT)
                         .show()
                 }
                 TableState.COMPUTER -> {
                     LogT.d("COMPUTER is Winner.")
+                    TicTacToeApplication.pref.setComScore(TicTacToeApplication.pref.getComScore() + 1)
+
+                    _comScore.value = TicTacToeApplication.pref.getComScore()
+
                     Snackbar.make(binding.layoutParent, "YOU LOSE.", Snackbar.LENGTH_SHORT)
                         .show()
                 }
@@ -79,6 +112,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         })
+
+        mainViewModel.resetAllData()
     }
 
     override fun onClick(v: View) {
@@ -109,6 +144,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.iv_table_item_8 -> {
                 mainViewModel.checkTicTacToe(8)
+            }
+            R.id.bt_main_reset -> {
+                mainViewModel.resetAllData()
             }
         }
     }

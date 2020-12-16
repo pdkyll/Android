@@ -1,123 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout_parent"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="TicTacToe"
-        android:textSize="32sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <GridLayout
+        <variable
+            name="mainViewModel"
+            type="com.thkim.tictactoe.ui.MainViewModel" />
+
+        <variable
+            name="mainActivity"
+            type="com.thkim.tictactoe.ui.MainActivity" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_parent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:columnCount="3"
-        android:orientation="horizontal"
-        android:rowCount="3">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/iv_table_item_0"
+        <Button
+            android:id="@+id/bt_main_reset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:background="@drawable/table_background"
             android:onClick="onClick"
-            android:src="@drawable/ic_outline_brightness_1_24" />
+            android:text="reset"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/iv_table_item_1"
+        <TextView
+            android:id="@+id/tv_my_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:background="@drawable/table_background"
-            android:onClick="onClick"
-            android:src="@drawable/ic_outline_brightness_1_24" />
+            android:layout_margin="12dp"
+            android:text="My name"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/iv_table_item_2"
+        <TextView
+            android:id="@+id/tv_com_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:background="@drawable/table_background"
-            android:onClick="onClick"
-            android:src="@drawable/ic_outline_brightness_1_24" />
+            android:layout_margin="12dp"
+            android:text="Computer"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/iv_table_item_3"
+        <TextView
+            android:id="@+id/tv_my_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:background="@drawable/table_background"
-            android:onClick="onClick"
-            android:src="@drawable/ic_outline_brightness_1_24" />
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:text="@{Integer.toString(mainActivity.myScore)}"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@id/tv_my_name"
+            app:layout_constraintStart_toStartOf="@id/tv_my_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_my_name"
+            tools:text="3" />
 
-        <ImageView
-            android:id="@+id/iv_table_item_4"
+        <TextView
+            android:id="@+id/tv_com_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:background="@drawable/table_background"
-            android:onClick="onClick"
-            android:src="@drawable/ic_outline_brightness_1_24" />
+            android:layout_marginTop="12dp"
+            android:text="@{Integer.toString(mainActivity.comScore)}"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@id/tv_com_name"
+            app:layout_constraintStart_toStartOf="@id/tv_com_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_com_name"
+            tools:text="3" />
 
-        <ImageView
-            android:id="@+id/iv_table_item_5"
+        <TextView
+            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:background="@drawable/table_background"
-            android:onClick="onClick"
-            android:src="@drawable/ic_outline_brightness_1_24" />
+            android:layout_gravity="center"
+            android:layout_marginTop="48dp"
+            android:text="TicTacToe"
+            android:textSize="32sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/iv_table_item_6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:background="@drawable/table_background"
-            android:onClick="onClick"
-            android:src="@drawable/ic_outline_brightness_1_24" />
+        <GridLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="48dp"
+            android:columnCount="3"
+            android:orientation="horizontal"
+            android:rowCount="3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_title">
 
-        <ImageView
-            android:id="@+id/iv_table_item_7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:background="@drawable/table_background"
-            android:onClick="onClick"
-            android:src="@drawable/ic_outline_brightness_1_24" />
+            <ImageView
+                android:id="@+id/iv_table_item_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:background="@drawable/table_background"
+                android:onClick="onClick"
+                app:resetImage="@{mainViewModel.resetAllImage}" />
 
-        <ImageView
-            android:id="@+id/iv_table_item_8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:background="@drawable/table_background"
-            android:onClick="onClick"
-            android:src="@drawable/ic_outline_brightness_1_24" />
+            <ImageView
+                android:id="@+id/iv_table_item_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:background="@drawable/table_background"
+                android:onClick="onClick"
+                app:resetImage="@{mainViewModel.resetAllImage}" />
 
-    </GridLayout>
+            <ImageView
+                android:id="@+id/iv_table_item_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:background="@drawable/table_background"
+                android:onClick="onClick"
+                app:resetImage="@{mainViewModel.resetAllImage}" />
 
-</LinearLayout>
+            <ImageView
+                android:id="@+id/iv_table_item_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:background="@drawable/table_background"
+                android:onClick="onClick"
+                app:resetImage="@{mainViewModel.resetAllImage}" />
+
+            <ImageView
+                android:id="@+id/iv_table_item_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:background="@drawable/table_background"
+                android:onClick="onClick"
+                app:resetImage="@{mainViewModel.resetAllImage}" />
+
+            <ImageView
+                android:id="@+id/iv_table_item_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:background="@drawable/table_background"
+                android:onClick="onClick"
+                app:resetImage="@{mainViewModel.resetAllImage}" />
+
+            <ImageView
+                android:id="@+id/iv_table_item_6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:background="@drawable/table_background"
+                android:onClick="onClick"
+                app:resetImage="@{mainViewModel.resetAllImage}" />
+
+            <ImageView
+                android:id="@+id/iv_table_item_7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:background="@drawable/table_background"
+                android:onClick="onClick"
+                app:resetImage="@{mainViewModel.resetAllImage}" />
+
+            <ImageView
+                android:id="@+id/iv_table_item_8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:background="@drawable/table_background"
+                android:onClick="onClick"
+                app:resetImage="@{mainViewModel.resetAllImage}" />
+
+        </GridLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
