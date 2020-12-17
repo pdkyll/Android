@@ -37,7 +37,7 @@ android {
     }
     buildFeatures {
         dataBinding = true
-        viewBinding = true
+//        viewBinding = true
     }
 }
 
@@ -58,4 +58,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$rootProject.lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-common-java8:$rootProject.lifecycleVersion"
+
+    implementation "com.airbnb.android:lottie:$rootProject.lottieVersion"
 }

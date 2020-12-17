@@ -1,4 +1,4 @@
-package com.thkim.tictactoe.ui
+package com.thkim.tictactoe.ui.main
 
 import android.os.Bundle
 import android.os.Handler
@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.android.material.snackbar.Snackbar
 import com.thkim.tictactoe.*
 import com.thkim.tictactoe.databinding.ActivityMainBinding
+import com.thkim.tictactoe.ui.EventDialogFragment
 import com.thkim.tictactoe.util.LogT
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -19,7 +20,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         const val STATE = 1
     }
 
-    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val mainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     private val mainViewModel: MainViewModel by viewModels { MainViewModelFactory() }
 
@@ -33,9 +34,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+        setContentView(mainBinding.root)
 
-        binding.apply {
+        mainBinding.apply {
             lifecycleOwner = this@MainActivity
             this.mainViewModel = this@MainActivity.mainViewModel
             this.mainActivity = this@MainActivity
@@ -63,7 +64,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                 }
                 TableState.ALREADY -> {
-                    Snackbar.make(binding.layoutParent, "It's already.", Snackbar.LENGTH_SHORT)
+                    Snackbar.make(mainBinding.layoutParent, "It's already.", Snackbar.LENGTH_SHORT)
                         .show()
                 }
             }
@@ -90,8 +91,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                     _myScore.value = TicTacToeApplication.pref.getMyScore()
 
-                    Snackbar.make(binding.layoutParent, "YOU ARE WINNER.", Snackbar.LENGTH_SHORT)
+                    Snackbar.make(mainBinding.layoutParent, "YOU ARE WINNER.", Snackbar.LENGTH_SHORT)
                         .show()
+                    EventDialogFragment().show(supportFragmentManager, "TAG_EventDialogFragment")
                 }
                 TableState.COMPUTER -> {
                     LogT.d("COMPUTER is Winner.")
@@ -99,18 +101,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                     _comScore.value = TicTacToeApplication.pref.getComScore()
 
-                    Snackbar.make(binding.layoutParent, "YOU LOSE.", Snackbar.LENGTH_SHORT)
+                    Snackbar.make(mainBinding.layoutParent, "YOU LOSE.", Snackbar.LENGTH_SHORT)
                         .show()
+                    EventDialogFragment().show(supportFragmentManager, "TAG_EventDialogFragment")
                 }
                 TableState.DONE -> {
                     LogT.d("Game is Done.")
-                    Snackbar.make(binding.layoutParent, "Draw Game.", Snackbar.LENGTH_SHORT)
+                    Snackbar.make(mainBinding.layoutParent, "Draw Game.", Snackbar.LENGTH_SHORT)
                         .show()
+                    EventDialogFragment().show(supportFragmentManager, "TAG_EventDialogFragment")
                 }
                 else -> {
                     mainViewModel.setComputerData()
                 }
             }
+
+            EventDialogFragment().show(supportFragmentManager, "TAG_EventDialogFragment")
         })
 
         mainViewModel.resetAllData()
@@ -153,15 +159,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun setPlayerImage(data: Int, resource: Int) {
         when (data) {
-            0 -> binding.ivTableItem0.setImageResource(resource)
-            1 -> binding.ivTableItem1.setImageResource(resource)
-            2 -> binding.ivTableItem2.setImageResource(resource)
-            3 -> binding.ivTableItem3.setImageResource(resource)
-            4 -> binding.ivTableItem4.setImageResource(resource)
-            5 -> binding.ivTableItem5.setImageResource(resource)
-            6 -> binding.ivTableItem6.setImageResource(resource)
-            7 -> binding.ivTableItem7.setImageResource(resource)
-            8 -> binding.ivTableItem8.setImageResource(resource)
+            0 -> mainBinding.ivTableItem0.setImageResource(resource)
+            1 -> mainBinding.ivTableItem1.setImageResource(resource)
+            2 -> mainBinding.ivTableItem2.setImageResource(resource)
+            3 -> mainBinding.ivTableItem3.setImageResource(resource)
+            4 -> mainBinding.ivTableItem4.setImageResource(resource)
+            5 -> mainBinding.ivTableItem5.setImageResource(resource)
+            6 -> mainBinding.ivTableItem6.setImageResource(resource)
+            7 -> mainBinding.ivTableItem7.setImageResource(resource)
+            8 -> mainBinding.ivTableItem8.setImageResource(resource)
         }
     }
 }

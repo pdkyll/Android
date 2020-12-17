@@ -1,4 +1,4 @@
-package com.thkim.tictactoe.ui
+package com.thkim.tictactoe.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
