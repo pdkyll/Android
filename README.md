@@ -1,5 +1,4 @@
 # Android
-나의 Android 개발 현황
 ## Tech
 * 안드로이드 개발에 도움이 되는 것을 스터디한 목록
   * MVVM
