@@ -1,0 +1,30 @@
+buildscript {
+    // dependencies.gradle 에 정의된 내용을 모든 프로젝트에서 사용할 수 있도록 합니다.
+    apply from: file('dependencies.gradle')
+
+    repositories {
+        // 그래들 빌드 플러그인 3.0 이후 버전은 Google Maven Repository 를 통해 제공됩니다.
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        // dependencies.gradle 내 정의된 값을 참조합니다.
+        classpath "com.android.tools.build:gradle:$androidPluginVersion"
+
+        // 코틀린 그래들 플러그인을 추가합니다.
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
+allprojects {
+    repositories {
+        // 서포트 라이브러리 26.0.0 이후 버전은 Google Maven Repository 를 통해 제공됩니다.
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

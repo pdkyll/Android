@@ -1,0 +1,98 @@
+apply plugin: 'com.android.application'
+
+// 코틀린 안드로이드 플러그인을 적용합니다.
+apply plugin: 'kotlin-android'
+
+// 코틀린 안드로이드 익스텐션 플러그인을 적용합니다.
+apply plugin: 'kotlin-android-extensions'
+
+// 코틀린 코드에서 어노테이션 프로세싱을 사용할 수 있도록 kotlin-kapt 플러그인을 추가로 적용합니다.
+apply plugin: 'kotlin-kapt'
+
+android {
+    // dependencies.gradle 에 정의된 값을 참조합니다.
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    // 코틀린 코드를 저장할 폴더를 소스 티렉터리로 등록합니다.
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    defaultConfig {
+        applicationId "com.androidhuman.example.simplegithub"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        // 그래들 프로퍼티에 정의된 값을 BuildConfig 내 필드로 변환해줍니다.
+        // 프로퍼티가 정의되어 있지 않다면 "NOT_FOUND" 값이 Build_Config 내 필드로 대입됩니다.
+        buildConfigField "String", "GITHUB_CLIENT_ID",
+                project.properties["GITHUB_CLIENT_ID"] ?: "\"NOT_FOUND\""
+
+        buildConfigField "String", "GITHUB_CLIENT_SECRET",
+                project.properties["GITHUB_CLIENT_SECRET"] ?: "\"NOT_FOUND\""
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.browser:browser:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    implementation "com.google.code.gson:gson:$gsonVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    // Retrofit 에서 받은 응답을 옵저버블로 변환해주는 라이브러리를 추가합니다.
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+
+    // Glide 4.0의 Generated API 를 위해 필요합니다.
+    // Glide 어노테이션 컴파일러가 의존성에 추가되어 있습니다.
+    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+
+    // 코틀린 표준 라이브러리를 의존성에 추가합니다.
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+
+    // 코틀린 어노테이션 프로세서에서 처리될 수 있도록 의존성에 추가합니다.
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
+
+    // Anko Commons 라이브러리를 의존성에 추가합니다.
+    implementation "org.jetbrains.anko:anko-commons:$ankoVersion"
+
+    // RxAndroid 와 RxJava 라이브러리를 추가합니다.
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+
+    // 서포트 라이브러리의 SearchView 를 위한 바인딩을 제공하는
+    // RxBinding 라이브러리를 추가합니다.
+    // androidX 로 마이그레이션 하여 -7 이 아닌 androidX 지원 버전으로 적용하였다.
+//    implementation "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:$rxBindingVersion"
+    implementation "com.jakewharton.rxbinding3:rxbinding-appcompat:$rxBindingVersion"
+
+    // 안드로이드 아키첵처 컴포넌트를 위한 의존성을 추가합니다.
+    // Lifecycles only (without ViewModel or LiveData)
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    // Annotation processor
+    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+
+    // 룸 라이브러리를 추가합니다.
+    implementation "androidx.room:room-runtime:$room_version"
+
+    // 룸 라이브러리 RxJava 플러그인을 추가합니다.
+    implementation "androidx.room:room-rxjava2:$room_version"
+
+    // 룸 라이브러리용 어노테이션 프로세서를 추가합니다.
+    kapt "androidx.room:room-compiler:$room_version"
+}
