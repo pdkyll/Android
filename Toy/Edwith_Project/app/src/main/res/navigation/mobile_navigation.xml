@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_movie_list">
+
+    <fragment
+        android:id="@+id/nav_movie_list"
+        android:name="com.taehyungkim.project_a.ui.MovieListFragment"
+        android:label="@string/movie_list"
+        tools:layout="@layout/fragment_movie_list">
+
+        <action
+            android:id="@+id/action_nav_movie_list_to_nav_movie_details"
+            app:destination="@id/nav_movie_details" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_movie_details"
+        android:name="com.taehyungkim.project_a.ui.MovieDetailsFragment"
+        android:label="@string/movie_details"
+        tools:layout="@layout/fragment_movie_details">
+
+        <action
+            android:id="@+id/action_nav_movie_details_to_nav_comment_list"
+            app:destination="@id/nav_comment_list"/>
+        <action
+            android:id="@+id/action_nav_movie_details_to_nav_writing_comment"
+            app:destination="@id/nav_writing_comment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_comment_list"
+        android:name="com.taehyungkim.project_a.ui.MovieCommentListFragment"
+        android:label="@string/comment_list"
+        tools:layout="@layout/fragment_comment_list" >
+        <action
+            android:id="@+id/action_nav_comment_list_to_nav_writing_comment"
+            app:destination="@id/nav_writing_comment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_writing_comment"
+        android:name="com.taehyungkim.project_a.ui.MovieWritingCommentFragment"
+        android:label="@string/writing_comment"
+        tools:layout="@layout/fragment_writing_comment" >
+        <action
+            android:id="@+id/action_nav_writing_comment_to_nav_movie_details"
+            app:destination="@id/nav_movie_details" />
+    </fragment>
+</navigation>
